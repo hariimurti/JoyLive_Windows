@@ -1,0 +1,70 @@
+﻿<Window x:Class="JoyLive.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:JoyLive"
+        xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+        mc:Ignorable="d"
+        Title="JoyLive — Unofficial" Height="530" Width="350" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto" Icon="Resources/icon.png" Loaded="Window_Loaded">
+    <Window.Resources>
+        <ResourceDictionary Source="ListBoxCustom.xaml" />
+    </Window.Resources>
+    <StackPanel>
+        <md:Card Padding="10" Margin="10">
+            <StackPanel>
+                <ListBox
+                    Name="listBox"
+                    Button.Click="ButtonLink_Click"
+                    ItemsSource="{Binding}"
+                    Style="{DynamicResource ResourceKey=listBoxCustom}"
+                    Height="360" Width="290"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    BorderThickness="0"
+                    ScrollViewer.HorizontalScrollBarVisibility="Hidden" Background="#FF424242" />
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="40"/>
+                    </Grid.RowDefinitions>
+
+                    <Button Name="buttonReset"
+                            Grid.Column="0"
+                            Height="30" Width="120"
+                            Style="{DynamicResource MaterialDesignRaisedButton}"
+                            Content="Reset"
+                            Click="ButtonReset_Click"
+                            IsEnabled="False">
+                        <!--<md:PackIcon Kind="Reload"/>-->
+                    </Button>
+
+                    <Button Name="buttonNext" Grid.Column="1"
+                            Height="30" Width="120"
+                            Style="{DynamicResource MaterialDesignRaisedButton}"
+                            Content="Get Page 1"
+                            Click="ButtonNext_Click">
+                        <!--<md:PackIcon Kind="SkipNext"/>-->
+                    </Button>
+                </Grid>
+            </StackPanel>
+        </md:Card>
+
+        <md:Card Padding="10,8" Margin="10,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="Status :" VerticalAlignment="Center" />
+                <ComboBox Grid.Column="1" Name="boxStatus" IsReadOnly="True" />
+            </Grid>
+        </md:Card>
+    </StackPanel>
+</Window>
