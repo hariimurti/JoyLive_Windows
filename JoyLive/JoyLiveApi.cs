@@ -1,22 +1,20 @@
 ﻿using Newtonsoft.Json;
 using RestSharp;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Net;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace JoyLive
 {
-    class JoyLiveApi
+    internal class JoyLiveApi
     {
         private static int nextPage = 1;
         public string errorMessage;
         public bool isError;
 
-        public JoyLiveApi() { }
+        public JoyLiveApi()
+        {
+        }
 
         public async Task<RoomInfo[]> GetRoomInfo()
         {
@@ -70,41 +68,41 @@ namespace JoyLive
             return await GetRoomInfo();
         }
 
-        public static async Task<string> GetImageCache(ListBoxContext context)
-        {
-            return await Task.Run(() =>
-            {
-                var filePath = Path.Combine(App.CacheDir, context.Id + ".tmp");
+        //public static async Task<string> GetImageCache(ListBoxContext context)
+        //{
+        //    return await Task.Run(() =>
+        //    {
+        //        var filePath = Path.Combine(App.CacheDir, context.Id + ".tmp");
 
-                try
-                {
-                    using (WebClient client = new WebClient())
-                    {
-                        client.DownloadFile(context.ImageUrl, filePath);
-                    }
+        //        try
+        //        {
+        //            using (WebClient client = new WebClient())
+        //            {
+        //                client.DownloadFile(context.ImageUrl, filePath);
+        //            }
 
-                    return filePath;
-                }
-                catch (Exception) { }
+        //            return filePath;
+        //        }
+        //        catch (Exception) { }
 
-                try
-                {
-                    var noImg = Properties.Resources.ResourceManager.GetStream("no-image.png");
-                    using (FileStream fileStream = new FileStream(filePath, FileMode.Create))
-                    {
-                        for (int i = 0; i < noImg.Length; i++)
-                        {
-                            fileStream.WriteByte((byte)noImg.ReadByte());
-                        }
-                        fileStream.Close();
-                    }
+        //        try
+        //        {
+        //            var noImg = Properties.Resources.ResourceManager.GetStream("no-image.png");
+        //            using (FileStream fileStream = new FileStream(filePath, FileMode.Create))
+        //            {
+        //                for (int i = 0; i < noImg.Length; i++)
+        //                {
+        //                    fileStream.WriteByte((byte)noImg.ReadByte());
+        //                }
+        //                fileStream.Close();
+        //            }
 
-                    return filePath;
-                }
-                catch (Exception) { }
+        //            return filePath;
+        //        }
+        //        catch (Exception) { }
 
-                return string.Empty;
-            });
-        }
+        //        return string.Empty;
+        //    });
+        //}
     }
 }

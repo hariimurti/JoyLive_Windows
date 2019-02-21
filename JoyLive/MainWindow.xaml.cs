@@ -1,21 +1,7 @@
-﻿using JoyLive;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Diagnostics;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace JoyLive
 {
@@ -46,19 +32,20 @@ namespace JoyLive
         private void ButtonLink_Click(object sender, RoutedEventArgs e)
         {
             var btn = e.OriginalSource as Button;
-            var link = btn.Tag as LinkData;
+            var user = btn.Tag as JoyUser;
 
-            if (link.Link.StartsWith("http"))
+            if (user == null) return;
+
+            if (user.Mode == JoyUser.ActionMode.Open)
             {
-                AddStatus($"Copy : {link.Nickname} ({link.Id})");
-                //Clipboard.SetText(link.Link);
-                var rtmp = link.Link.Replace("http://", "rtmp://").Replace("/playlist.m3u8","");
-                Clipboard.SetText(rtmp);
+                AddStatus($"Open : {user.Nickname} ({user.Id})");
+                var window = new AdvancedWindow(user);
+                window.Show();
             }
             else
             {
-                AddStatus($"Play : {link.Nickname} ({link.Id})");
-                Process.Start(link.Link);
+                AddStatus($"Play : {user.Nickname} ({user.Id})");
+                Process.Start(user.Url);
             }
         }
 
@@ -66,7 +53,7 @@ namespace JoyLive
         {
             buttonReset.IsEnabled = false;
             buttonNext.IsEnabled = false;
-            buttonNext.Content = "Loading...";
+            //textNextPage.Text = "Loading...";
 
             var api = new JoyLiveApi();
 
@@ -75,7 +62,7 @@ namespace JoyLive
             var users = await api.Reset();
             if (!api.isError)
             {
-                await InsertUsers(users, true);
+                InsertUsers(users, true);
             }
             else
             {
@@ -84,14 +71,14 @@ namespace JoyLive
 
             buttonReset.IsEnabled = true;
             buttonNext.IsEnabled = true;
-            buttonNext.Content = "Get Page " + api.GetNextPage();
+            textNextPage.Text = "Get Page " + api.GetNextPage();
         }
 
         private async void ButtonNext_Click(object sender, RoutedEventArgs e)
         {
             buttonReset.IsEnabled = false;
             buttonNext.IsEnabled = false;
-            buttonNext.Content = "Loading...";
+            //textNextPage.Text = "Loading...";
 
             var api = new JoyLiveApi();
 
@@ -100,7 +87,7 @@ namespace JoyLive
             var users = await api.GetRoomInfo();
             if (!api.isError)
             {
-                await InsertUsers(users);
+                InsertUsers(users);
             }
             else
             {
@@ -109,10 +96,10 @@ namespace JoyLive
 
             buttonReset.IsEnabled = true;
             buttonNext.IsEnabled = true;
-            buttonNext.Content = "Get Page " + api.GetNextPage();
+            textNextPage.Text = "Get Page " + api.GetNextPage();
         }
 
-        private async Task InsertUsers(RoomInfo[] users, bool reset = false)
+        private void InsertUsers(RoomInfo[] users, bool reset = false)
         {
             int count = 0;
             if (reset) listBox.Items.Clear();
@@ -124,7 +111,6 @@ namespace JoyLive
 
                 count++;
                 var context = new ListBoxContext(user.mid, user.nickname, user.announcement, user.headPic, user.videoPlayUrl);
-                context.SetImagePath(await JoyLiveApi.GetImageCache(context));
                 listBox.Items.Add(context);
             }
 

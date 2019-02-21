@@ -1,8 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:JoyLive"
-                    xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
-                    xmlns:cachedImage="clr-namespace:CachedImage;assembly=CachedImage">
+                    xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes">
 
     <DataTemplate x:Key="listBoxItem">
         <Grid>
@@ -36,34 +35,34 @@
                        Grid.Row="0"
                        TextTrimming="CharacterEllipsis"
                        VerticalAlignment="Bottom"
-                       FontSize="12" Foreground="White" />
+                       FontSize="12"
+                       Foreground="White" />
                 <TextBlock Text="{Binding Path=Announcement}"
                        Grid.Row="1"
                        TextTrimming="CharacterEllipsis"
                        VerticalAlignment="Top"
                        FontSize="10"
-                       FontStyle="Italic" Foreground="White" />
+                       Foreground="White" />
             </Grid>
 
-            <Button Tag="{Binding Path=CopyLink}"
+            <Button Tag="{Binding Path=OpenLink}"
                     Grid.Column="2"
                     Height="20" Width="20"
                     Style="{DynamicResource MaterialDesignFloatingActionDarkButton}">
-                <md:PackIcon Kind="ContentCopy" Height="10" Width="10"/>
+                <md:PackIcon Kind="User" Height="10" Width="10" />
             </Button>
 
-            <Button Tag="{Binding Path=OpenLink}"
+            <Button Tag="{Binding Path=PlayLink}"
                     Grid.Column="3"
                     Height="20" Width="20"
                     Style="{DynamicResource MaterialDesignFloatingActionDarkButton}">
-                <md:PackIcon Kind="Play" Height="10" Width="10"/>
+                <md:PackIcon Kind="Play" Height="10" Width="10" />
             </Button>
-            <Separator Grid.Row="1" Grid.ColumnSpan="4"/>
+            <Separator Grid.Row="1" Grid.ColumnSpan="4" />
         </Grid>
     </DataTemplate>
 
     <Style x:Key="listBoxCustom" TargetType="{x:Type ListBox}">
         <Setter Property="ItemTemplate" Value="{StaticResource ResourceKey=listBoxItem}" />
     </Style>
-
 </ResourceDictionary>

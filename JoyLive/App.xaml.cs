@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace JoyLive
@@ -16,15 +11,15 @@ namespace JoyLive
     public partial class App : Application
     {
         public static readonly string WorkingDir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-        public static readonly string CacheDir = GetCacheDir();
+        public static readonly string OutputDir = GetOutputDir();
 
-        private static string GetCacheDir()
+        private static string GetOutputDir()
         {
-            var cache = Path.Combine(WorkingDir, "cache");
-            if (!Directory.Exists(cache))
-                Directory.CreateDirectory(cache);
+            var record = Path.Combine(WorkingDir, "Record");
+            if (!Directory.Exists(record))
+                Directory.CreateDirectory(record);
 
-            return cache;
+            return record;
         }
 
         public static string GetBuildVersion()
