@@ -1,33 +1,27 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows.Media.Imaging;
 
 namespace JoyLive
 {
-    internal class ListBoxContext : INotifyPropertyChanged
+    internal class ListBoxContext
     {
         public string Id { get; set; }
         public string Nickname { get; set; }
         public string Announcement { get; set; }
-        public string ImageUrl { get; set; }
-        public JoyUser PlayLink { get; set; }
-        public JoyUser OpenLink { get; set; }
+        public BitmapImage ImageProfile { get; set; }
+        public UserAction PlayStream { get; set; }
+        public UserAction OpenUser { get; set; }
 
-        public ListBoxContext(string _id, string _nickname, string _announcement, string _imageUrl, string _link)
+        public ListBoxContext(User user)
         {
-            Id = _id;
-            Nickname = _nickname;
-            Announcement = _announcement;
-            ImageUrl = _imageUrl;
-
-            PlayLink = new JoyUser(_id, _nickname, _imageUrl, _link, JoyUser.ActionMode.Play);
-            OpenLink = new JoyUser(_id, _nickname, _imageUrl, _link, JoyUser.ActionMode.Open);
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            Id = user.mid;
+            Nickname = user.nickname;
+            Announcement = user.announcement;
+            ImageProfile = new BitmapImage(new Uri(user.headPic));
+            PlayStream = new UserAction(user, UserAction.Action.Play);
+            OpenUser = new UserAction(user, UserAction.Action.Open);
         }
     }
 }

@@ -16,7 +16,7 @@ namespace JoyLive
         {
         }
 
-        public async Task<RoomInfo[]> GetRoomInfo()
+        public async Task<User[]> GetRoomInfo()
         {
             return await Task.Run(() =>
             {
@@ -62,7 +62,7 @@ namespace JoyLive
             return nextPage.ToString();
         }
 
-        public async Task<RoomInfo[]> Reset()
+        public async Task<User[]> Reset()
         {
             nextPage = 1;
             return await GetRoomInfo();

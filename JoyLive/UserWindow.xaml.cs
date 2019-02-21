@@ -11,31 +11,28 @@ namespace JoyLive
     /// <summary>
     /// Interaction logic for AdvancedWindow.xaml
     /// </summary>
-    public partial class AdvancedWindow : Window
+    public partial class UserWindow : Window
     {
-        private JoyUser user;
+        private User user;
         private Process process;
 
-        public AdvancedWindow(JoyUser user)
+        public UserWindow(User user)
         {
             InitializeComponent();
 
             this.user = user;
 
-            Title = "JoyLive : " + user.Nickname;
+            Title = $"{user.nickname} — {user.announcement}";
 
-            imageProfile.Source = new BitmapImage(new Uri(user.ImageUrl));
-            textId.Text = user.Id;
-            textNickname.Text = user.Nickname;
-
-            linkRtmp.NavigateUri = new Uri(user.Url);
-            textRtmp.Text = user.Url;
-
-            linkHttp.NavigateUri = new Uri(user.Url.ToPlaylistUrl());
-            textHttp.Text = user.Url.ToPlaylistUrl();
+            imageProfile.Source = new BitmapImage(new Uri(user.headPic));
+            textId.Text = user.mid;
+            textNickname.Text = user.nickname;
+            textAnnouncement.Text = user.announcement;
+            textLiveSince.Text = user.playStartTime.ToHumanReadableFormat();
+            textViewer.Text = user.onlineNum.ToString();//.ToHumanReadableFormat();
         }
 
-        private async void Button_Click(object sender, RoutedEventArgs e)
+        private async void ButtonDump_Click(object sender, RoutedEventArgs e)
         {
             if (process != null)
             {
@@ -46,13 +43,13 @@ namespace JoyLive
             buttonDump.Content = "Stop Process";
 
             var timenow = DateTime.Now.ToString("yyyyMMdd_HHmmss");
-            var filename = $"{timenow}_{user.Id}.flv";
-            var filepath = System.IO.Path.Combine(App.OutputDir, filename);
+            var filename = $"{timenow}_{user.mid}.flv";
+            var filepath = Path.Combine(App.OutputDir, filename);
 
             ProcessStartInfo exec = new ProcessStartInfo
             {
                 FileName = "rtmpdump.exe",
-                Arguments = $"−−live −r {user.Url} -o \"{filepath}\"",
+                Arguments = $"−−live −r {user.videoPlayUrl} -o \"{filepath}\"",
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
                 UseShellExecute = false,
@@ -104,6 +101,18 @@ namespace JoyLive
             catch (Exception) { }
         }
 
+        private void ButtonPlay_Click(object sender, RoutedEventArgs e)
+        {
+            Process.Start(user.videoPlayUrl);
+            SetStatus("Opening stream with default player...");
+        }
+
+        private void ButtonCopy_Click(object sender, RoutedEventArgs e)
+        {
+            Clipboard.SetText($"{user.nickname} — {user.announcement}\n\n▶️ LiveShow » {user.videoPlayUrl.ToPlaylist()}");
+            SetStatus("Link is copied into clipboard...");
+        }
+
         private void DataReceivedHandler(object s, DataReceivedEventArgs o)
         {
             if (string.IsNullOrWhiteSpace(o.Data)) return;
@@ -117,21 +126,6 @@ namespace JoyLive
                 Dispatcher.Invoke(() => textStatus.Text = text);
             }
             catch (Exception) { }
-        }
-
-        private void Hyperlink_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
-        {
-            var link = e.Uri.ToString();
-            if (link.StartsWith("rtmp"))
-            {
-                Process.Start(link);
-                SetStatus("Opening stream with default player...");
-            }
-            else
-            {
-                Clipboard.SetText($"{user.Nickname}\n\n▶️ LiveShow » {link}");
-                SetStatus("Link is copied into clipboard...");
-            }
         }
     }
 }

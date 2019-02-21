@@ -17,7 +17,7 @@
             </Grid.RowDefinitions>
 
             <Image
-                Source="{Binding Path=ImageUrl}"
+                Source="{Binding Path=ImageProfile}"
                 Grid.Column="0"
                 Height="30" Width="30"
                 Stretch="UniformToFill" />
@@ -45,18 +45,18 @@
                        Foreground="White" />
             </Grid>
 
-            <Button Tag="{Binding Path=OpenLink}"
+            <Button Tag="{Binding Path=OpenUser}"
                     Grid.Column="2"
                     Height="20" Width="20"
                     Style="{DynamicResource MaterialDesignFloatingActionDarkButton}">
-                <md:PackIcon Kind="User" Height="10" Width="10" />
+                <md:PackIcon Kind="User" Height="15" Width="15" />
             </Button>
 
-            <Button Tag="{Binding Path=PlayLink}"
+            <Button Tag="{Binding Path=PlayStream}"
                     Grid.Column="3"
                     Height="20" Width="20"
                     Style="{DynamicResource MaterialDesignFloatingActionDarkButton}">
-                <md:PackIcon Kind="Play" Height="10" Width="10" />
+                <md:PackIcon Kind="Play" Height="15" Width="15" />
             </Button>
             <Separator Grid.Row="1" Grid.ColumnSpan="4" />
         </Grid>

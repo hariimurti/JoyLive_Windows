@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -17,9 +18,9 @@ namespace JoyLive
             Title = string.Format("{0} v{1}", Title, App.GetBuildVersion());
         }
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
+        private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            ButtonNext_Click(null, null);
+            await GetNextPage();
         }
 
         private void AddStatus(string text)
@@ -32,28 +33,39 @@ namespace JoyLive
         private void ButtonLink_Click(object sender, RoutedEventArgs e)
         {
             var btn = e.OriginalSource as Button;
-            var user = btn.Tag as JoyUser;
+            var ua = btn.Tag as UserAction;
 
-            if (user == null) return;
+            if (ua == null) return;
 
-            if (user.Mode == JoyUser.ActionMode.Open)
+            var user = ua.user;
+            if (ua.action == UserAction.Action.Play)
             {
-                AddStatus($"Open : {user.Nickname} ({user.Id})");
-                var window = new AdvancedWindow(user);
-                window.Show();
+                AddStatus($"Play : {user.nickname} ({user.mid})");
+                Process.Start(user.videoPlayUrl);
             }
             else
             {
-                AddStatus($"Play : {user.Nickname} ({user.Id})");
-                Process.Start(user.Url);
+                AddStatus($"Open : {user.nickname} ({user.mid})");
+                var window = new UserWindow(user);
+                window.Show();
             }
+            
         }
 
         private async void ButtonReset_Click(object sender, RoutedEventArgs e)
         {
+            await ResetListWithPageOne();
+        }
+
+        private async void ButtonNext_Click(object sender, RoutedEventArgs e)
+        {
+            await GetNextPage();
+        }
+
+        private async Task ResetListWithPageOne()
+        {
             buttonReset.IsEnabled = false;
             buttonNext.IsEnabled = false;
-            //textNextPage.Text = "Loading...";
 
             var api = new JoyLiveApi();
 
@@ -74,11 +86,10 @@ namespace JoyLive
             textNextPage.Text = "Get Page " + api.GetNextPage();
         }
 
-        private async void ButtonNext_Click(object sender, RoutedEventArgs e)
+        private async Task GetNextPage()
         {
             buttonReset.IsEnabled = false;
             buttonNext.IsEnabled = false;
-            //textNextPage.Text = "Loading...";
 
             var api = new JoyLiveApi();
 
@@ -99,7 +110,7 @@ namespace JoyLive
             textNextPage.Text = "Get Page " + api.GetNextPage();
         }
 
-        private void InsertUsers(RoomInfo[] users, bool reset = false)
+        private void InsertUsers(User[] users, bool reset = false)
         {
             int count = 0;
             if (reset) listBox.Items.Clear();
@@ -110,7 +121,7 @@ namespace JoyLive
                 if (user.sex != "2") continue;
 
                 count++;
-                var context = new ListBoxContext(user.mid, user.nickname, user.announcement, user.headPic, user.videoPlayUrl);
+                var context = new ListBoxContext(user);
                 listBox.Items.Add(context);
             }
 
