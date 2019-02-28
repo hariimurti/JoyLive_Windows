@@ -30,6 +30,8 @@ namespace JoyLive
             textAnnouncement.Text = user.announcement;
             textLiveSince.Text = user.playStartTime.ToHumanReadableFormat();
             textViewer.Text = user.onlineNum.ToString();//.ToHumanReadableFormat();
+
+            SetStatus("Let's start the party...");
         }
 
         private async void ButtonDump_Click(object sender, RoutedEventArgs e)

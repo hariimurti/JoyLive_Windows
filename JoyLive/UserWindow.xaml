@@ -80,7 +80,7 @@
 
         <md:Card Margin="10,10,10,0" Padding="10">
             <DockPanel LastChildFill="False" Height="50" Margin="10,0">
-                <TextBox Name="textStatus" Text="Status......" IsReadOnly="True" Width="345" VerticalAlignment="Center" Margin="0,14" />
+                <TextBox Name="textStatus" IsReadOnly="True" Width="345" VerticalAlignment="Center" Margin="0,14" />
                 <Button DockPanel.Dock="Right" Name="buttonDump" Content="Dump Stream" Click="ButtonDump_Click" VerticalAlignment="Center" />
             </DockPanel>
         </md:Card>
