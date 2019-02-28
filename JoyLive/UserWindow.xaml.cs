@@ -26,10 +26,12 @@ namespace JoyLive
 
             imageProfile.Source = new BitmapImage(new Uri(user.headPic));
             textId.Text = user.mid;
+            textPrice.Text = $"{user.price} 💰";
             textNickname.Text = user.nickname;
             textAnnouncement.Text = user.announcement;
             textLiveSince.Text = user.playStartTime.ToHumanReadableFormat();
             textViewer.Text = user.onlineNum.ToString();//.ToHumanReadableFormat();
+            textFans.Text = user.fansNum;
 
             SetStatus("Let's start the party...");
         }

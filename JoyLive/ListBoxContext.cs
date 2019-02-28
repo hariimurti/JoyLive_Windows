@@ -22,6 +22,9 @@ namespace JoyLive
             ImageProfile = new BitmapImage(new Uri(user.headPic));
             PlayStream = new UserAction(user, UserAction.Action.Play);
             OpenUser = new UserAction(user, UserAction.Action.Open);
+
+            if (user.price != 0)
+                Nickname += $" — {user.price} 💰";
         }
     }
 }

@@ -29,6 +29,7 @@
         public string moderatorLevel { get; set; }
         public bool verified { get; set; }
         public string videoPlayUrl { get; set; }
+        public int price { get; set; }
     }
 
     public class UserAction

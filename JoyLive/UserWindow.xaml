@@ -38,8 +38,18 @@
                         <RowDefinition />
                     </Grid.RowDefinitions>
 
-                    <TextBlock Grid.Row="0" Grid.Column="0" Text="ID :" VerticalAlignment="Center" />
-                    <TextBlock Grid.Row="0" Grid.Column="1" Name="textId" VerticalAlignment="Center" />
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Member :" VerticalAlignment="Center" />
+                    <Grid Grid.Row="0" Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*" />
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="1*" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Column="0" Name="textId" Margin="0,0,10,0" VerticalAlignment="Center" />
+                        <TextBlock Grid.Column="1" Text="Price :" VerticalAlignment="Center" />
+                        <TextBlock Grid.Column="2" Name="textPrice" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" />
+                    </Grid>
 
                     <TextBlock Grid.Row="1" Grid.Column="0" Text="Nickname :" VerticalAlignment="Center" />
                     <TextBlock Grid.Row="1" Grid.Column="1"
@@ -53,11 +63,21 @@
                                TextTrimming="CharacterEllipsis"
                                VerticalAlignment="Center" />
 
-                    <TextBlock Grid.Row="3" Grid.Column="0" Text="Live Since :" VerticalAlignment="Center" />
-                    <TextBlock Grid.Row="3" Grid.Column="1" Name="textLiveSince" VerticalAlignment="Center" />
+                    <TextBlock Grid.Row="3" Grid.Column="0" Text="Fans :" VerticalAlignment="Center" />
+                    <TextBlock Grid.Row="3" Grid.Column="1" Name="textFans" VerticalAlignment="Center" />
 
-                    <TextBlock Grid.Row="4" Grid.Column="0" Text="Viewer :" VerticalAlignment="Center" />
-                    <TextBlock Grid.Row="4" Grid.Column="1" Name="textViewer" VerticalAlignment="Center" />
+                    <TextBlock Grid.Row="4" Grid.Column="0" Text="Live Since :" VerticalAlignment="Center" />
+                    <Grid Grid.Row="4" Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*" />
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="1*" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Column="0" Name="textLiveSince" Margin="0,0,10,0" VerticalAlignment="Center" />
+                        <TextBlock Grid.Column="1" Text="Viewer :" VerticalAlignment="Center" />
+                        <TextBlock Grid.Column="2" Name="textViewer" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" />
+                    </Grid>
 
                     <Button Grid.Row="0" Grid.Column="2" Grid.RowSpan="2"
                             Height="30" Width="30"
