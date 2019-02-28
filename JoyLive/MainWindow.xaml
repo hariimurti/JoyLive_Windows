@@ -28,7 +28,8 @@
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     BorderThickness="0"
-                    ScrollViewer.HorizontalScrollBarVisibility="Hidden" Background="#FF424242" />
+                    ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                    Background="#FF424242" />
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />

@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 
 namespace JoyLive
 {
@@ -20,6 +21,8 @@ namespace JoyLive
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            AddStatus("Website https://github.com/hariimurti");
+            AddStatus("Starting...");
             await GetNextPage();
         }
 
