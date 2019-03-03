@@ -87,6 +87,11 @@ namespace JoyLive
             buttonReset.IsEnabled = true;
             buttonNext.IsEnabled = true;
             textNextPage.Text = "Get Page " + api.GetNextPage();
+
+            if (listBox.Items.Count > 0)
+            {
+                listBox.ScrollIntoView(listBox.Items[0]);
+            }
         }
 
         private async Task GetNextPage()
