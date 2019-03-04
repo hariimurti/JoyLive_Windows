@@ -21,6 +21,8 @@ namespace JoyLive
             InitializeComponent();
 
             this.user = user;
+            if (string.IsNullOrWhiteSpace(user.announcement))
+                user.announcement = "Hey, come and check my show now!";
 
             Title = $"{user.nickname} — {user.announcement}";
 

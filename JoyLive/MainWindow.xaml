@@ -34,6 +34,7 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />
                         <ColumnDefinition />
+                        <ColumnDefinition />
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="40" />
@@ -41,7 +42,7 @@
 
                     <Button Name="buttonReset"
                             Grid.Column="0"
-                            Height="30" Width="120"
+                            Height="30" Width="90"
                             Style="{DynamicResource MaterialDesignRaisedButton}"
                             Click="ButtonReset_Click"
                             IsEnabled="False">
@@ -52,14 +53,25 @@
                         </StackPanel>
                     </Button>
 
-                    <Button Name="buttonNext" Grid.Column="1"
-                            Height="30" Width="120"
+                    <Button Name="buttonMore" Grid.Column="1"
+                            Height="30" Width="90"
                             Style="{DynamicResource MaterialDesignRaisedButton}"
-                            Click="ButtonNext_Click">
+                            Click="ButtonMore_Click">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Name="textNextPage" Text="Get Page 1" />
+                            <TextBlock Text="More" />
                             <Separator Width="2" Background="{x:Null}" />
                             <md:PackIcon Kind="SkipNext" />
+                        </StackPanel>
+                    </Button>
+
+                    <Button Name="buttonFind" Grid.Column="2"
+                            Height="30" Width="90"
+                            Style="{DynamicResource MaterialDesignRaisedButton}"
+                            Click="ButtonFind_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Find" />
+                            <Separator Width="2" Background="{x:Null}" />
+                            <md:PackIcon Kind="Search" />
                         </StackPanel>
                     </Button>
                 </Grid>

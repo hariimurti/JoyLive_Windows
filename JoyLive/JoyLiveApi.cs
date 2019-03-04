@@ -108,6 +108,11 @@ namespace JoyLive
             return nextPage.ToString();
         }
 
+        public static string GetCurrentPage()
+        {
+            return (nextPage - 1).ToString();
+        }
+
         public async Task<User[]> Reset()
         {
             nextPage = 1;

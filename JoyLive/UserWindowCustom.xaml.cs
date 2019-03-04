@@ -90,7 +90,10 @@ namespace JoyLive
                 SetStatus(api.errorMessage);
                 return;
             }
-            
+
+            if (string.IsNullOrWhiteSpace(user.signature))
+                user.signature = "Hey, come and check my show now!";
+
             Title = $"{user.nickname} — {user.signature}";
             imageProfile.Source = new BitmapImage(new Uri(user.headPic));
             textId.Text = user.id;
@@ -116,7 +119,7 @@ namespace JoyLive
             buttonDump.Content = "Stop Process";
 
             var timenow = DateTime.Now.ToString("yyyyMMdd_HHmmss");
-            var filename = $"{timenow}_{user.mid}.flv";
+            var filename = $"{timenow}_{user.id}.flv";
             var filepath = Path.Combine(App.OutputDir, filename);
 
             ProcessStartInfo exec = new ProcessStartInfo
