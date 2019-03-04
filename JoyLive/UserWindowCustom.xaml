@@ -1,0 +1,109 @@
+﻿<Window x:Class="JoyLive.UserWindowCustom"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:JoyLive"
+        xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+        mc:Ignorable="d"
+        Height="340" Width="550"
+        ResizeMode="CanMinimize"
+        Icon="Resources/icon.png"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto">
+    <StackPanel Margin="0,10,0,0">
+
+        <md:Card Margin="10,0" Padding="10">
+            <StackPanel Margin="10,0">
+                <TextBlock Text="Link Playlist/Rtmp or Member ID :" />
+                <DockPanel LastChildFill="False" Height="50">
+                    <TextBox Name="textInput" Width="390" VerticalAlignment="Center" Margin="0,14" />
+                    <Button DockPanel.Dock="Right" Name="buttonFind" Content="Find ID" Click="ButtonFind_Click" VerticalAlignment="Center" />
+                </DockPanel>
+            </StackPanel>
+        </md:Card>
+        
+        <md:Card Margin="10,8,10,0" Padding="10">
+            <DockPanel LastChildFill="True" >
+                <Border DockPanel.Dock="Left" Grid.Row="0" Grid.RowSpan="4" Grid.Column="0"
+                        Width="90" Height="90"
+                        BorderThickness="1" BorderBrush="{DynamicResource MaterialDesignBody}"
+                        VerticalAlignment="Center" >
+                    <Image Name="imageProfile" Width="Auto" Height="Auto" />
+                </Border>
+                
+                <Separator Width="10" Background="{x:Null}" />
+                
+                <Grid DockPanel.Dock="Right" Height="90" VerticalAlignment="Top">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1.5*" />
+                        <ColumnDefinition Width="4*" />
+                        <ColumnDefinition Width="1*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Member :" VerticalAlignment="Center" />
+                    <Grid Grid.Row="0" Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*" />
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="1*" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Column="0" Name="textId" Margin="0,0,10,0" VerticalAlignment="Center" />
+                        <TextBlock Grid.Column="1" Text="Price :" VerticalAlignment="Center" />
+                        <TextBlock Grid.Column="2" Name="textPrice" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" />
+                    </Grid>
+
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Nickname :" VerticalAlignment="Center" />
+                    <TextBlock Grid.Row="1" Grid.Column="1"
+                               Name="textNickname"
+                               TextTrimming="CharacterEllipsis"
+                               VerticalAlignment="Center" />
+
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="Signature :" VerticalAlignment="Center" />
+                    <TextBlock Grid.Row="2" Grid.Column="1"
+                               Name="textAnnouncement"
+                               TextTrimming="CharacterEllipsis"
+                               VerticalAlignment="Center" />
+
+                    <TextBlock Grid.Row="3" Grid.Column="0" Text="Fans :" VerticalAlignment="Center" />
+                    <TextBlock Grid.Row="3" Grid.Column="1" Name="textFans" VerticalAlignment="Center" />
+
+                    <TextBlock Grid.Row="4" Grid.Column="0" Text="Birthday :" VerticalAlignment="Center" />
+                    <TextBlock Grid.Row="4" Grid.Column="1" Name="textBirthday" VerticalAlignment="Center" />
+
+                    <Button Grid.Row="0" Grid.Column="2" Grid.RowSpan="2"
+                            Height="30" Width="30"
+                            Name="buttonCopy"
+                            Style="{DynamicResource MaterialDesignFloatingActionDarkButton}"
+                            Click="ButtonCopy_Click">
+                        <md:PackIcon Kind="ContentCopy" Height="20" Width="20" />
+                    </Button>
+
+                    <Button Grid.Row="3" Grid.Column="2" Grid.RowSpan="2"
+                            Height="30" Width="30"
+                            Name="buttonPlay"
+                            Style="{DynamicResource MaterialDesignFloatingActionDarkButton}"
+                            Click="ButtonPlay_Click">
+                        <md:PackIcon Kind="Play" Height="20" Width="20" />
+                    </Button>
+                </Grid>
+            </DockPanel>
+        </md:Card>
+
+        <md:Card Margin="10,10,10,0" Padding="10">
+            <DockPanel LastChildFill="False" Height="50" Margin="10,0">
+                <TextBox Name="textStatus" IsReadOnly="True" Width="345" VerticalAlignment="Center" Margin="0,14" />
+                <Button DockPanel.Dock="Right" Name="buttonDump" Content="Dump Stream" Click="ButtonDump_Click" VerticalAlignment="Center" />
+            </DockPanel>
+        </md:Card>
+    </StackPanel>
+</Window>

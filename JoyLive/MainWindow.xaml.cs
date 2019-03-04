@@ -138,5 +138,14 @@ namespace JoyLive
             else
                 AddStatus($"Can't find any girl in {users.Length} users...");
         }
+
+        private void Window_KeyUp(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (e.Key == System.Windows.Input.Key.F12)
+            {
+                var window = new UserWindowCustom();
+                window.Show();
+            }
+        }
     }
 }

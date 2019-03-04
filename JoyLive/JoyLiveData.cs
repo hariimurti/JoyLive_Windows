@@ -6,6 +6,12 @@
         public string msg { get; set; }
         public Data data { get; set; }
     }
+    public class JoyLiveUserData
+    {
+        public int errno { get; set; }
+        public string msg { get; set; }
+        public UserInfo data { get; set; }
+    }
 
     public class Data
     {
@@ -27,9 +33,16 @@
         public string announcement { get; set; }
         public string level { get; set; }
         public string moderatorLevel { get; set; }
-        public bool verified { get; set; }
+        //public bool verified { get; set; }
         public string videoPlayUrl { get; set; }
         public int price { get; set; }
+    }
+
+    public class UserInfo : User
+    {
+        public string id { get; set; }
+        public string signature { get; set; }
+        public string birthday { get; set; }
     }
 
     public class UserAction

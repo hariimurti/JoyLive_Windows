@@ -1,7 +1,8 @@
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using RestSharp;
 using System;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace JoyLive
@@ -14,6 +15,51 @@ namespace JoyLive
 
         public JoyLiveApi()
         {
+        }
+
+        public async Task<UserInfo> GetUser(string id)
+        {
+            return await Task.Run(() =>
+            {
+                try
+                {
+                    var client = new RestClient("http://app.joylive.tv");
+                    var request = new RestRequest($"user/GetUserInfo?uid={id}");
+                    request.AddParameter("androidVersion", "9");
+                    request.AddParameter("packageId", "3");
+                    request.AddParameter("channel", "developer-default");
+                    request.AddParameter("version", "2.7.6");
+                    request.AddParameter("deviceName", "Pixel XL");
+                    request.AddParameter("platform", "android");
+                    request.AddHeader("Host", "app.joylive.tv");
+                    request.AddHeader("Connection", "keep-alive");
+                    request.AddHeader("User-Agent", "Gogo.Live 2.7.6");
+                    request.AddHeader("Content-Type", "application/x-www-form-urlencoded");
+
+                    var response = client.Post(request);
+                    var content = response.Content;
+
+                    Match regex = Regex.Match(content, @"({[\s\S]+})");
+                    if (regex.Success)
+                    {
+                        content = regex.Groups[1].Value;
+                    }
+
+                    try { File.WriteAllText("JoyUser.json", content); }
+                    catch (Exception ex) { Console.WriteLine(ex.Message); }
+
+                    var json = JsonConvert.DeserializeObject<JoyLiveUserData>(content);
+
+                    return json.data;
+                }
+                catch (Exception ex)
+                {
+                    isError = true;
+                    Console.WriteLine(ex);
+                    errorMessage = ex.Message;
+                    return null;
+                }
+            });
         }
 
         public async Task<User[]> GetRoomInfo()
