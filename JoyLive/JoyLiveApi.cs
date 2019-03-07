@@ -25,16 +25,16 @@ namespace JoyLive
                 {
                     var client = new RestClient("http://app.joylive.tv");
                     var request = new RestRequest($"user/GetUserInfo?uid={id}");
+                    request.AddHeader("Host", "app.joylive.tv");
+                    request.AddHeader("Connection", "keep-alive");
+                    request.AddHeader("User-Agent", "Gogo.Live 2.7.6");
                     request.AddParameter("androidVersion", "9");
                     request.AddParameter("packageId", "3");
                     request.AddParameter("channel", "developer-default");
                     request.AddParameter("version", "2.7.6");
-                    request.AddParameter("deviceName", "Pixel XL");
+                    request.AddParameter("deviceName", "Google Pixel XL");
                     request.AddParameter("platform", "android");
-                    request.AddHeader("Host", "app.joylive.tv");
-                    request.AddHeader("Connection", "keep-alive");
-                    request.AddHeader("User-Agent", "Gogo.Live 2.7.6");
-                    request.AddHeader("Content-Type", "application/x-www-form-urlencoded");
+                    request.AlwaysMultipartFormData = true;
 
                     var response = client.Post(request);
                     var content = response.Content;
