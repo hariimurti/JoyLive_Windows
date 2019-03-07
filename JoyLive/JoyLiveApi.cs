@@ -10,6 +10,13 @@ namespace JoyLive
 {
     internal class JoyLiveApi
     {
+        public static readonly string BaseMobileUrl = "http://m.joylive.tv";
+        public static readonly string BaseAppUrl = "http://app.joylive.tv";
+        public static readonly string UserAgentGogoLive = "Gogo.Live 2.7.6";
+        public static readonly string UserAgentBrowser = "Mozilla/5.0 (Linux; Android 9; Pixel 2 XL) " +
+            "AppleWebKit/537.36 (KHTML, like Gecko) " +
+            "Chrome/71.0.3578.98 Mobile Safari/537.36";
+
         private static int nextPage = 1;
         public string errorMessage;
         public bool isError;
@@ -22,16 +29,16 @@ namespace JoyLive
         {
             try
             {
-                var client = new RestClient("http://app.joylive.tv");
+                var client = new RestClient(BaseAppUrl);
                 var request = new RestRequest($"user/GetUserInfo?uid={id}");
-                request.AddHeader("Host", "app.joylive.tv");
+                request.AddHeader("Host", BaseAppUrl.Replace("http://",""));
                 request.AddHeader("Connection", "keep-alive");
-                request.AddHeader("User-Agent", "Gogo.Live 2.7.6");
+                request.AddHeader("User-Agent", UserAgentGogoLive);
                 request.AddParameter("androidVersion", "9");
                 request.AddParameter("packageId", "3");
                 request.AddParameter("channel", "developer-default");
                 request.AddParameter("version", "2.7.6");
-                request.AddParameter("deviceName", "Google Pixel XL");
+                request.AddParameter("deviceName", "Google Pixel 2 XL");
                 request.AddParameter("platform", "android");
                 request.AlwaysMultipartFormData = true;
                 request.Method = Method.POST;
@@ -66,15 +73,15 @@ namespace JoyLive
         {
             try
             {
-                var client = new RestClient("http://m.cblive.tv");
+                var client = new RestClient(BaseMobileUrl);
                 var request = new RestRequest("index/getRoomInfo");
                 request.AddParameter("page", nextPage);
-                request.AddHeader("Host", "m.cblive.tv");
+                request.AddHeader("Host", BaseMobileUrl.Replace("http://",""));
                 request.AddHeader("Connection", "keep-alive");
                 request.AddHeader("Accept", "application/json");
-                request.AddHeader("Origin", "http://m.cblive.tv");
-                request.AddHeader("Referer", "http://m.cblive.tv/");
-                request.AddHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36");
+                request.AddHeader("Origin", BaseMobileUrl);
+                request.AddHeader("Referer", $"{BaseMobileUrl}/");
+                request.AddHeader("User-Agent", UserAgentBrowser);
                 request.AddHeader("Content-Type", "application/x-www-form-urlencoded");
                 request.AddHeader("Accept-Encoding", "gzip, deflate");
                 request.AddHeader("Accept-Language", "en,id;q=0.9");
