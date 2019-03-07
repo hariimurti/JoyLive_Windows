@@ -40,8 +40,20 @@
                         <RowDefinition Height="40" />
                     </Grid.RowDefinitions>
 
-                    <Button Name="buttonReset"
+                    <Button Name="buttonFind"
                             Grid.Column="0"
+                            Height="30" Width="90"
+                            Style="{DynamicResource MaterialDesignRaisedButton}"
+                            Click="ButtonFind_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Find" />
+                            <Separator Width="2" Background="{x:Null}" />
+                            <md:PackIcon Kind="Search" />
+                        </StackPanel>
+                    </Button>
+
+                    <Button Name="buttonReset"
+                            Grid.Column="1"
                             Height="30" Width="90"
                             Style="{DynamicResource MaterialDesignRaisedButton}"
                             Click="ButtonReset_Click"
@@ -53,7 +65,8 @@
                         </StackPanel>
                     </Button>
 
-                    <Button Name="buttonMore" Grid.Column="1"
+                    <Button Name="buttonMore"
+                            Grid.Column="2"
                             Height="30" Width="90"
                             Style="{DynamicResource MaterialDesignRaisedButton}"
                             Click="ButtonMore_Click">
@@ -61,17 +74,6 @@
                             <TextBlock Text="More" />
                             <Separator Width="2" Background="{x:Null}" />
                             <md:PackIcon Kind="SkipNext" />
-                        </StackPanel>
-                    </Button>
-
-                    <Button Name="buttonFind" Grid.Column="2"
-                            Height="30" Width="90"
-                            Style="{DynamicResource MaterialDesignRaisedButton}"
-                            Click="ButtonFind_Click">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Find" />
-                            <Separator Width="2" Background="{x:Null}" />
-                            <md:PackIcon Kind="Search" />
                         </StackPanel>
                     </Button>
                 </Grid>
