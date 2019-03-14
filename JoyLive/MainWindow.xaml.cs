@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows;
@@ -21,7 +21,7 @@ namespace JoyLive
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            AddStatus("Website https://github.com/hariimurti");
+            AddStatus("Find Me at https://github.com/hariimurti");
             AddStatus("Starting...");
             await GetNextPage();
         }
@@ -78,7 +78,7 @@ namespace JoyLive
 
             var api = new JoyLiveApi();
 
-            AddStatus("Reset: Loading page 1...");
+            AddStatus("Reset: Loading page 1");
 
             var users = await api.Reset();
             if (!api.isError)
@@ -106,7 +106,7 @@ namespace JoyLive
 
             var api = new JoyLiveApi();
 
-            AddStatus($"Loading page {api.GetNextPage()}...");
+            AddStatus($"Loading page {api.GetNextPage()}");
 
             var users = await api.GetRoomInfo();
             if (!api.isError)
@@ -129,8 +129,8 @@ namespace JoyLive
 
             foreach (var user in users)
             {
-                //only female
-                if (user.sex != "2") continue;
+                //only female & unknown
+                if (user.sex == "1") continue;
 
                 var context = new ListBoxContext(user);
 
@@ -141,10 +141,7 @@ namespace JoyLive
                 }
             }
 
-            if (count > 0)
-                AddStatus($"Added {count} new girls...");
-            else
-                AddStatus($"Can't find any girl in page {JoyLiveApi.GetCurrentPage()} of {users.Length} users...");
+            if (count > 0) AddStatus($"Added {count} new users");
         }
 
         private void Window_KeyUp(object sender, System.Windows.Input.KeyEventArgs e)
