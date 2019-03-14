@@ -186,7 +186,7 @@ namespace JoyLive
                 if (isStopped || (checkboxForever.IsChecked == false) || (counter > maxRetry))
                     break;
 
-                await Task.Delay(10000);
+                await Task.Delay(30000);
                 counter++;
             }
 
