@@ -111,9 +111,12 @@
 
         <md:Card Margin="10,10,10,0" Padding="6">
             <DockPanel LastChildFill="False" Height="60" Margin="10,0" VerticalAlignment="Top">
-                <TextBox Name="textStatus" IsReadOnly="True" Width="345" VerticalAlignment="Bottom" Margin="0,0,0,8" />
+                <StackPanel Orientation="Vertical">
+                    <TextBlock Text="Status :" VerticalAlignment="Center" Margin="0,3,0,10" />
+                    <TextBox Name="textStatus" IsReadOnly="True" Width="345" VerticalAlignment="Bottom" />
+                </StackPanel>
                 <StackPanel Orientation="Vertical" DockPanel.Dock="Right">
-                    <CheckBox Margin="0,0,0,5" Name="checkboxForever" Content="Record Forever" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                    <CheckBox Margin="0,0,4,5" Name="checkboxForever" Content="Maximum Retry" VerticalAlignment="Center" HorizontalAlignment="Center" />
                     <Button Width="120" Name="buttonDump" Content="Dump Stream" Click="ButtonDump_Click" VerticalAlignment="Center" />
                 </StackPanel>
             </DockPanel>
