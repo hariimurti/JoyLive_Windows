@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Imaging;
@@ -9,60 +10,210 @@ using System.Windows.Threading;
 namespace JoyLive
 {
     /// <summary>
-    /// Interaction logic for AdvancedWindow.xaml
+    /// Interaction logic for UserWindow.xaml
     /// </summary>
     public partial class UserWindow : Window
     {
         private User user;
         private Process process;
+        private bool isStopped;
+        private int maxRetry = 100;
 
         public UserWindow(User user)
         {
             InitializeComponent();
 
+            if (user == null)
+            {
+                Title = "JoyLive — User Finder and Recorder";
+
+                labelLiveSince.Text = "Birthday :";
+                LockButton(true);
+
+                SetStatus("Ready to find user...");
+
+                return;
+            }
+
+            cardFind.Visibility = Visibility.Collapsed;
+            Height = 250;
+
             this.user = user;
+            LoadUserInfo(user);
+
+            SetStatus("Let's start the party...");
+        }
+
+        private void LoadUserInfo()
+        {
+            Title = "JoyLive — User Finder and Recorder";
+            imageProfile.Source = null;
+            textId.Text = "0";
+            textPrice.Text = "0 💰";
+            textNickname.Text = ". . . .";
+            textAnnouncement.Text = ". . . .";
+            textFans.Text = "0";
+            textLiveSince.Text = "0000-00-00";
+        }
+
+        private void LoadUserInfo(User user)
+        {
             if (string.IsNullOrWhiteSpace(user.announcement))
                 user.announcement = "Hey, come and check my show now!";
 
             Title = $"{user.nickname} — {user.announcement}";
-
             imageProfile.Source = new BitmapImage(new Uri(user.headPic));
             textId.Text = user.mid;
             textPrice.Text = $"{user.price} 💰";
             textNickname.Text = user.nickname;
             textAnnouncement.Text = user.announcement;
             textLiveSince.Text = user.playStartTime.ToHumanReadableFormat();
-            textViewer.Text = user.onlineNum.ToString();//.ToHumanReadableFormat();
+            textViewer.Text = user.onlineNum.ToString();
             textFans.Text = user.fansNum;
+        }
 
-            SetStatus("Let's start the party...");
+        private void LoadUserInfo(UserInfo userInfo)
+        {
+            if (string.IsNullOrWhiteSpace(userInfo.signature))
+                userInfo.signature = "Hey, come and check my show now!";
+
+            Title = $"{userInfo.nickname} — {userInfo.signature}";
+            imageProfile.Source = new BitmapImage(new Uri(userInfo.headPic));
+            textId.Text = userInfo.id;
+            textPrice.Text = $"{userInfo.price} 💰";
+            textNickname.Text = userInfo.nickname;
+            textAnnouncement.Text = userInfo.signature;
+            textFans.Text = userInfo.fansNum;
+            textLiveSince.Text = userInfo.birthday;
+        }
+
+        private void LockButton(bool state)
+        {
+            if (state) LoadUserInfo();
+
+            buttonCopy.IsEnabled = !state;
+            buttonPlay.IsEnabled = !state;
+            buttonDump.IsEnabled = !state;
+        }
+
+        private void ButtonPaste_Click(object sender, RoutedEventArgs e)
+        {
+            var paste = Clipboard.GetText();
+            if (string.IsNullOrWhiteSpace(paste))
+                return;
+            if (!paste.StartsWith("rtmp") && !paste.StartsWith("http"))
+                return;
+
+            textInput.Text = paste;
+            ButtonFind_Click(sender, e);
+        }
+
+        private async void ButtonFind_Click(object sender, RoutedEventArgs e)
+        {
+            var text = textInput.Text.Trim();
+            if (string.IsNullOrWhiteSpace(text))
+            {
+                SetStatus("Input isn't valid!!!");
+                return;
+            }
+
+            Console.WriteLine("Input : " + text);
+
+            var id = text;
+            if (text.StartsWith("rtmp") || text.StartsWith("http"))
+            {
+                Match regex = Regex.Match(text, @"live/(\d+)/?");
+                if (regex.Success)
+                {
+                    id = regex.Groups[1].Value;
+                }
+            }
+
+            Console.WriteLine("ID : " + id);
+            if (Regex.IsMatch(id, @"^\d$"))
+            {
+                SetStatus("Input isn't valid!!!");
+                return;
+            }
+
+            LockButton(true);
+            buttonPaste.IsEnabled = false;
+            buttonFind.IsEnabled = false;
+
+            var api = new JoyLiveApi();
+            var userInfo = await api.GetUser(id);
+
+            buttonPaste.IsEnabled = true;
+            buttonFind.IsEnabled = true;
+
+            if (api.isError)
+            {
+                SetStatus(api.errorMessage);
+                return;
+            }
+
+            // parse userInfo to user
+            user = new User
+            {
+                mid = userInfo.id,
+                nickname = userInfo.nickname,
+                announcement = userInfo.signature,
+                videoPlayUrl = userInfo.videoPlayUrl
+            };
+
+            LoadUserInfo(userInfo);
+            LockButton(false);
+
+            SetStatus("Let's start the party");
         }
 
         private async void ButtonDump_Click(object sender, RoutedEventArgs e)
         {
             if (process != null)
             {
+                isStopped = true;
                 process.Kill();
                 return;
             }
 
             buttonDump.Content = "Stop Process";
 
-            var timenow = DateTime.Now.ToString("yyyyMMdd_HHmmss");
-            var filename = $"{timenow}_{user.mid}.flv";
-            var filepath = Path.Combine(App.OutputDir, filename);
+            isStopped = false;
+            int counter = 0;
+            while(true)
+            {
+                await DumpStream();
+                if (isStopped || (checkboxForever.IsChecked == false) || (counter > maxRetry))
+                    break;
 
-            ProcessStartInfo exec = new ProcessStartInfo
+                await Task.Delay(10000);
+                counter++;
+            }
+
+            buttonDump.Content = "Dump Stream";
+        }
+
+        private ProcessStartInfo RtmpDump(string url, string filepath)
+        {
+            return new ProcessStartInfo
             {
                 FileName = "rtmpdump.exe",
-                Arguments = $"−−live −r {user.videoPlayUrl} -o \"{filepath}\"",
+                Arguments = $"−−live −r {url} -o \"{filepath}\"",
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
                 UseShellExecute = false,
                 CreateNoWindow = true
             };
+    }
 
-            process = Process.Start(exec);
+        private async Task DumpStream()
+        {
+            var timenow = DateTime.Now.ToString("yyyyMMdd_HHmmss");
+            var filename = $"{timenow}_{user.mid}.flv";
+            var filepath = Path.Combine(App.OutputDir, filename);
+
+            var rtmpdump = RtmpDump(user.videoPlayUrl, filepath);
+            process = Process.Start(rtmpdump);
             process.OutputDataReceived += new DataReceivedEventHandler(DataReceivedHandler);
             process.BeginOutputReadLine();
             process.ErrorDataReceived += new DataReceivedEventHandler(DataReceivedHandler);
@@ -77,7 +228,7 @@ namespace JoyLive
                     break;
 
                 case 0:
-                    SetStatus("Live stream has ended...");
+                    SetStatus("Live stream has ended");
                     break;
 
                 default:
@@ -85,11 +236,9 @@ namespace JoyLive
                     break;
             }
 
-            process?.Dispose();
             process?.Close();
+            process?.Dispose();
             process = null;
-
-            buttonDump.Content = "Dump Stream";
 
             try
             {
@@ -110,13 +259,13 @@ namespace JoyLive
         private void ButtonPlay_Click(object sender, RoutedEventArgs e)
         {
             Process.Start(user.videoPlayUrl);
-            SetStatus("Opening stream with default player...");
+            SetStatus("Opening stream with default player");
         }
 
         private void ButtonCopy_Click(object sender, RoutedEventArgs e)
         {
             Clipboard.SetText($"{user.nickname} — {user.announcement}\n\n▶️ LiveShow » {user.videoPlayUrl.ToPlaylist()}");
-            SetStatus("Link is copied into clipboard...");
+            SetStatus("Link is copied into clipboard");
         }
 
         private void DataReceivedHandler(object s, DataReceivedEventArgs o)
@@ -129,7 +278,8 @@ namespace JoyLive
         {
             try
             {
-                Dispatcher.Invoke(() => textStatus.Text = text);
+                var time = DateTime.Now.ToString("HH:mm:ss");
+                Dispatcher.Invoke(() => textStatus.Text = $"{time} » {text}");
             }
             catch (Exception) { }
         }

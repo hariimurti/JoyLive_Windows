@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows;
@@ -57,7 +57,7 @@ namespace JoyLive
 
         private void ButtonFind_Click(object sender, RoutedEventArgs e)
         {
-            var window = new UserWindowCustom();
+            var window = new UserWindow(null);
             window.Show();
         }
 
