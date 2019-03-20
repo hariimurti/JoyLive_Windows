@@ -1,4 +1,6 @@
-﻿namespace JoyLive
+﻿using System.Collections.Generic;
+
+namespace JoyLive
 {
     public class JoyLiveData
     {
@@ -36,6 +38,8 @@
         //public bool verified { get; set; }
         public string videoPlayUrl { get; set; }
         public int price { get; set; }
+
+        public List<string> blacklist = new List<string>() { "2170276", "79041", "51987", "24499" };
     }
 
     public class UserInfo : User

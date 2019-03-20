@@ -132,6 +132,9 @@ namespace JoyLive
                 //only female & unknown
                 if (user.sex == "1") continue;
 
+                //check blacklist
+                if (user.blacklist.Contains(user.mid)) continue;
+
                 var context = new ListBoxContext(user);
 
                 if (!listBox.Items.Contains(context))
