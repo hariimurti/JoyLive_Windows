@@ -17,7 +17,9 @@ namespace JoyLive
         private User user;
         private Process process;
         private bool isStopped;
-        private int maxRetry = 100;
+        private readonly int maxRetry = 100;
+        private const string button_dump = "Dump Stream";
+        private const string button_stop = "Stop Process";
 
         public UserWindow(User user)
         {
@@ -42,6 +44,17 @@ namespace JoyLive
             LoadUserInfo(user);
 
             SetStatus("Let's start the party...");
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            var paste = Clipboard.GetText();
+            if (string.IsNullOrWhiteSpace(paste))
+                return;
+            if (!paste.StartsWith("rtmp") && !paste.StartsWith("http"))
+                return;
+
+            textInput.Text = paste;
         }
 
         private void LoadUserInfo()
@@ -98,13 +111,7 @@ namespace JoyLive
 
         private void ButtonPaste_Click(object sender, RoutedEventArgs e)
         {
-            var paste = Clipboard.GetText();
-            if (string.IsNullOrWhiteSpace(paste))
-                return;
-            if (!paste.StartsWith("rtmp") && !paste.StartsWith("http"))
-                return;
-
-            textInput.Text = paste;
+            Window_Loaded(sender, e);
             ButtonFind_Click(sender, e);
         }
 
@@ -176,7 +183,7 @@ namespace JoyLive
                 return;
             }
 
-            buttonDump.Content = "Stop Process";
+            buttonDump.Content = button_dump;
 
             isStopped = false;
             int counter = 0;
@@ -190,7 +197,7 @@ namespace JoyLive
                 counter++;
             }
 
-            buttonDump.Content = "Dump Stream";
+            buttonDump.Content = button_stop;
         }
 
         private ProcessStartInfo RtmpDump(string url, string filepath)
