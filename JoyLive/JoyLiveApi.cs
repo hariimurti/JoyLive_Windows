@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using RestSharp;
 using System;
 using System.IO;
@@ -46,6 +46,7 @@ namespace JoyLive
                 var cts = new CancellationTokenSource();
                 var response = await client.ExecuteTaskAsync(request, cts.Token);
                 var content = response.Content;
+                cts.Dispose();
 
                 Match regex = Regex.Match(content, @"({[\s\S]+})");
                 if (regex.Success)
@@ -91,6 +92,7 @@ namespace JoyLive
                 var cts = new CancellationTokenSource();
                 var response = await client.ExecuteTaskAsync(request, cts.Token);
                 var content = response.Content;
+                cts.Dispose();
 
                 try { File.WriteAllText("JoyLive.json", content); }
                 catch (Exception ex) { Console.WriteLine(ex.Message); }
