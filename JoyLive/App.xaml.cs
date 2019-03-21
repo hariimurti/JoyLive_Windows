@@ -12,6 +12,7 @@ namespace JoyLive
     {
         public static readonly string WorkingDir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
         public static readonly string OutputDir = GetOutputDir();
+        public static readonly string CookiesFile = Path.Combine(WorkingDir, "JoyLive.dat");
 
         private static string GetOutputDir()
         {

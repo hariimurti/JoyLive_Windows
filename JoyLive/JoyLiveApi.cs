@@ -3,6 +3,7 @@ using RestSharp;
 using System;
 using System.IO;
 using System.Net;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -37,7 +38,7 @@ namespace JoyLive
             {
                 ResetApi();
                 var client = new RestClient(BaseAppUrl);
-                client.CookieContainer = new CookieContainer();
+                client.CookieContainer = ReadCookies();
                 var request = new RestRequest($"user/GetUserInfo?uid={id}");
                 request.AddHeader("Host", BaseAppUrl.Replace("http://",""));
                 request.AddHeader("Connection", "keep-alive");
@@ -54,6 +55,8 @@ namespace JoyLive
                 var cts = new CancellationTokenSource();
                 var response = await client.ExecuteTaskAsync(request, cts.Token);
                 var content = response.Content;
+
+                WriteCookies(client.CookieContainer);
                 cts.Dispose();
 
                 Match regex = Regex.Match(content, @"({[\s\S]+})");
@@ -84,7 +87,7 @@ namespace JoyLive
             {
                 ResetApi();
                 var client = new RestClient(BaseMobileUrl);
-                client.CookieContainer = new CookieContainer();
+                client.CookieContainer = ReadCookies();
                 var request = new RestRequest("index/getRoomInfo");
                 request.AddParameter("page", nextPage);
                 request.AddHeader("Host", BaseMobileUrl.Replace("http://",""));
@@ -102,6 +105,8 @@ namespace JoyLive
                 var cts = new CancellationTokenSource();
                 var response = await client.ExecuteTaskAsync(request, cts.Token);
                 var content = response.Content;
+
+                WriteCookies(client.CookieContainer);
                 cts.Dispose();
 
                 try { File.WriteAllText("JoyLive.json", content); }
@@ -135,6 +140,37 @@ namespace JoyLive
         {
             nextPage = 1;
             return await GetRoomInfo();
+        }
+
+        private CookieContainer ReadCookies()
+        {
+            if (!File.Exists(App.CookiesFile)) return new CookieContainer();
+
+            try
+            {
+                using (Stream stream = File.Open(App.CookiesFile, FileMode.Open))
+                {
+                    var formatter = new BinaryFormatter();
+                    return formatter.Deserialize(stream) as CookieContainer;
+                }
+            }
+            catch (Exception)
+            {
+                return new CookieContainer();
+            }
+        }
+
+        private static void WriteCookies(CookieContainer cookies)
+        {
+            try
+            {
+                using (Stream stream = File.Create(App.CookiesFile))
+                {
+                    var formatter = new BinaryFormatter();
+                    formatter.Serialize(stream, cookies);
+                }
+            }
+            catch (Exception) { }
         }
     }
 }
