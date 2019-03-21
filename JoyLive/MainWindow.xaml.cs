@@ -21,9 +21,11 @@ namespace JoyLive
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            AddStatus("Find Me at https://github.com/hariimurti");
+            buttonMore.IsEnabled = false;
             AddStatus("Starting...");
+            AddStatus("Find Me at https://github.com/hariimurti");
 
+            AddStatus("Checking status...");
             var api = new JoyLiveApi();
             var status = await api.isLoggedIn();
             App.UseLoginMethod = status;
@@ -36,6 +38,7 @@ namespace JoyLive
             }
 
             await GetNextPage();
+            buttonMore.IsEnabled = true;
         }
 
         private void AddStatus(string text)
