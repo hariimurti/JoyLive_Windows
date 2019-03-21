@@ -56,15 +56,23 @@ namespace JoyLive
             var user = ua.user;
             if (ua.action == UserAction.Action.Play)
             {
-                var room = await new JoyLiveApi().GetRoomInfo(user.rid);
-                if (room.isPlaying)
+                if (App.UseLoginMethod)
                 {
-                    Process.Start(user.videoPlayUrl);
-                    AddStatus($"Play : {user.nickname} ({user.mid})");
+                    var room = await new JoyLiveApi().GetRoomInfo(user.rid);
+                    if (room.isPlaying)
+                    {
+                        Process.Start(user.videoPlayUrl);
+                        AddStatus($"Play : {user.nickname} ({user.mid})");
+                    }
+                    else
+                    {
+                        AddStatus($"{user.nickname} ({user.mid}) - Offline");
+                    }
                 }
                 else
                 {
-                    AddStatus($"{user.nickname} ({user.mid}) - Offline");
+                    Process.Start(user.videoPlayUrl);
+                    AddStatus($"Play : {user.nickname} ({user.mid})");
                 }
             }
             else

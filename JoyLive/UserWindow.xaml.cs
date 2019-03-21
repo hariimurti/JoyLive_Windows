@@ -199,10 +199,17 @@ namespace JoyLive
             var timestart = DateTime.Now;
             while(true)
             {
-                var room = await api.GetRoomInfo(user.rid);
-                textViewer.Text = room.onlineNum.ToString();
-                SetStatus(room.isPlaying ? "User Online" : "User Offline");
-                if (room.isPlaying)
+                if (App.UseLoginMethod)
+                {
+                    var room = await api.GetRoomInfo(user.rid);
+                    textViewer.Text = room.onlineNum.ToString();
+                    SetStatus(room.isPlaying ? "User Online" : "User Offline");
+                    if (room.isPlaying)
+                    {
+                        await DumpStream();
+                    }
+                }
+                else
                 {
                     await DumpStream();
                 }
@@ -289,16 +296,24 @@ namespace JoyLive
         private async void ButtonPlay_Click(object sender, RoutedEventArgs e)
         {
             buttonPlay.IsEnabled = false;
-            var room = await new JoyLiveApi().GetRoomInfo(user.rid);
-            if (room.isPlaying)
+            if (App.UseLoginMethod)
             {
-                Process.Start(user.videoPlayUrl);
-                SetStatus("Opening stream with default player");
-                return;
+                var room = await new JoyLiveApi().GetRoomInfo(user.rid);
+                if (room.isPlaying)
+                {
+                    Process.Start(user.videoPlayUrl);
+                    SetStatus("Opening stream with default player");
+                    return;
+                }
+                else
+                {
+                    SetStatus("User Offline");
+                }
             }
             else
             {
-                SetStatus("User Offline");
+                Process.Start(user.videoPlayUrl);
+                SetStatus("Opening stream with default player");
             }
             buttonPlay.IsEnabled = true;
         }
