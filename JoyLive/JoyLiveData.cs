@@ -17,7 +17,15 @@ namespace JoyLive
     {
         public UserInfo data { get; set; }
     }
-        public UserInfo data { get; set; }
+
+    public class JoyLiveLogin : JoyLiveBase
+    {
+        public Login data { get; set; }
+    }
+
+    public class Login
+    {
+        public string uid { get; set; }
     }
 
     public class Rooms

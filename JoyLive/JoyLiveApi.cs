@@ -1,4 +1,4 @@
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using RestSharp;
 using System;
 using System.IO;
@@ -32,6 +32,104 @@ namespace JoyLive
             isError = false;
             errorMessage = string.Empty;
         }
+
+        public async Task<bool> isLoggedIn()
+        {
+            try
+            {
+                ResetApi();
+                var client = new RestClient(BaseAppUrl);
+                client.CookieContainer = ReadCookies();
+                var request = new RestRequest($"user/GetMyInfo");
+                request.AddHeader("Host", BaseAppUrl.Replace("http://", ""));
+                request.AddHeader("Connection", "keep-alive");
+                request.AddHeader("User-Agent", UserAgentGogoLive);
+                request.AddParameter("androidVersion", "9");
+                request.AddParameter("packageId", "3");
+                request.AddParameter("channel", "developer-default");
+                request.AddParameter("version", "2.7.6");
+                request.AddParameter("deviceName", "Google Pixel 2 XL");
+                request.AddParameter("platform", "android");
+                request.AlwaysMultipartFormData = true;
+                request.Method = Method.POST;
+
+                var cts = new CancellationTokenSource();
+                var response = await client.ExecuteTaskAsync(request, cts.Token);
+                var content = response.Content;
+
+                WriteCookies(client.CookieContainer);
+                cts.Dispose();
+
+                Match regex = Regex.Match(content, @"({[\s\S]+})");
+                if (regex.Success)
+                {
+                    content = regex.Groups[1].Value;
+                }
+
+                var json = JsonConvert.DeserializeObject<JoyLiveUserInfo>(content);
+
+                return (json.errno != 100);
+            }
+            catch (Exception ex)
+            {
+                isError = true;
+                Console.WriteLine(ex);
+                errorMessage = ex.Message;
+                return false;
+            }
+        }
+
+        public async Task<bool> Login()
+        {
+            try
+            {
+                ResetApi();
+                var client = new RestClient(BaseAppUrl);
+                var request = new RestRequest($"user/login");
+                client.CookieContainer = ReadCookies();
+                request.AddHeader("Host", BaseAppUrl.Replace("http://", ""));
+                request.AddHeader("Connection", "keep-alive");
+                request.AddHeader("User-Agent", UserAgentGogoLive);
+                request.AddParameter("androidVersion", "9");
+                request.AddParameter("packageId", "3");
+                request.AddParameter("channel", "developer-default");
+                request.AddParameter("version", "2.7.6");
+                request.AddParameter("deviceName", "Google Pixel 2 XL");
+                request.AddParameter("platform", "android");
+                request.AddParameter("remember", "true");
+                request.AddParameter("username", "62895377348858");
+                request.AddParameter("password", "d1jJ8nMd50wzneu3MA2q6JpQuJj5UrbA2RSwCsbtRrEZY1ER2oe/" +
+                    "ZckJMLtwLCKs7YyzY/IEOO4+Xa1NORn8HLZTtQfgHxK4I5ZNOGJsU6aWxuW7Zqr57/" +
+                    "aNZ9epluxpkUu+o3rFtYJWkABUB8rGz70Xzs3J4LB3SnCT2zqKccc=");
+                request.AlwaysMultipartFormData = true;
+                request.Method = Method.POST;
+
+                var cts = new CancellationTokenSource();
+                var response = await client.ExecuteTaskAsync(request, cts.Token);
+                var content = response.Content;
+
+                WriteCookies(client.CookieContainer);
+                cts.Dispose();
+
+                Match regex = Regex.Match(content, @"({[\s\S]+})");
+                if (regex.Success)
+                {
+                    content = regex.Groups[1].Value;
+                }
+
+                var json = JsonConvert.DeserializeObject<JoyLiveLogin>(content);
+
+                return (json.errno == 0) && !string.IsNullOrWhiteSpace(json.data.uid);
+            }
+            catch (Exception ex)
+            {
+                isError = true;
+                Console.WriteLine(ex);
+                errorMessage = ex.Message;
+                return false;
+            }
+        }
+
         public async Task<UserInfo> GetUser(string id)
         {
             try

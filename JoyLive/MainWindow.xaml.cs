@@ -23,6 +23,18 @@ namespace JoyLive
         {
             AddStatus("Find Me at https://github.com/hariimurti");
             AddStatus("Starting...");
+
+            var api = new JoyLiveApi();
+            var status = await api.isLoggedIn();
+            App.UseLoginMethod = status;
+            AddStatus("Status : " + (status ? "Logged In" : "Logged Out"));
+            if (!status)
+            {
+                var login = await api.Login();
+                AddStatus("Login : " + (login ? "Success" : "Failed"));
+                App.UseLoginMethod = login;
+            }
+
             await GetNextPage();
         }
 
