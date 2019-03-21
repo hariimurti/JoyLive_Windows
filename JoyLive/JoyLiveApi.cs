@@ -2,6 +2,7 @@ using Newtonsoft.Json;
 using RestSharp;
 using System;
 using System.IO;
+using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -30,6 +31,7 @@ namespace JoyLive
             try
             {
                 var client = new RestClient(BaseAppUrl);
+                client.CookieContainer = new CookieContainer();
                 var request = new RestRequest($"user/GetUserInfo?uid={id}");
                 request.AddHeader("Host", BaseAppUrl.Replace("http://",""));
                 request.AddHeader("Connection", "keep-alive");
@@ -75,6 +77,7 @@ namespace JoyLive
             try
             {
                 var client = new RestClient(BaseMobileUrl);
+                client.CookieContainer = new CookieContainer();
                 var request = new RestRequest("index/getRoomInfo");
                 request.AddParameter("page", nextPage);
                 request.AddHeader("Host", BaseMobileUrl.Replace("http://",""));
