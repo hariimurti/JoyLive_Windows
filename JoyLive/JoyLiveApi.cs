@@ -130,6 +130,55 @@ namespace JoyLive
             }
         }
 
+        public async Task<RoomInfo> GetRoomInfo(string id)
+        {
+            try
+            {
+                ResetApi();
+                var client = new RestClient(BaseAppUrl);
+                client.CookieContainer = ReadCookies();
+                var request = new RestRequest($"room/GetInfo?rid={id}");
+                request.AddHeader("Host", BaseAppUrl.Replace("http://", ""));
+                request.AddHeader("Connection", "keep-alive");
+                request.AddHeader("User-Agent", UserAgentGogoLive);
+                request.AddParameter("androidVersion", "9");
+                request.AddParameter("packageId", "3");
+                request.AddParameter("channel", "developer-default");
+                request.AddParameter("version", "2.7.6");
+                request.AddParameter("deviceName", "Google Pixel 2 XL");
+                request.AddParameter("platform", "android");
+                request.AlwaysMultipartFormData = true;
+                request.Method = Method.POST;
+
+                var cts = new CancellationTokenSource();
+                var response = await client.ExecuteTaskAsync(request, cts.Token);
+                var content = response.Content;
+
+                WriteCookies(client.CookieContainer);
+                cts.Dispose();
+
+                Match regex = Regex.Match(content, @"({[\s\S]+})");
+                if (regex.Success)
+                {
+                    content = regex.Groups[1].Value;
+                }
+
+                try { File.WriteAllText("JoyRoom.json", content); }
+                catch (Exception ex) { Console.WriteLine(ex.Message); }
+
+                var json = JsonConvert.DeserializeObject<JoyLiveRoomInfo>(content);
+
+                return json.data;
+            }
+            catch (Exception ex)
+            {
+                isError = true;
+                Console.WriteLine(ex);
+                errorMessage = ex.Message;
+                return null;
+            }
+        }
+
         public async Task<UserInfo> GetUser(string id)
         {
             try

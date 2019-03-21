@@ -13,6 +13,11 @@ namespace JoyLive
         public Rooms data { get; set; }
     }
 
+    public class JoyLiveRoomInfo : JoyLiveBase
+    {
+        public RoomInfo data { get; set; }
+    }
+
     public class JoyLiveUserInfo : JoyLiveBase
     {
         public UserInfo data { get; set; }
@@ -60,6 +65,19 @@ namespace JoyLive
         public string id { get; set; }
         public string signature { get; set; }
         public string birthday { get; set; }
+    }
+
+    public class RoomInfo
+    {
+        public string id { get; set; }
+        public string videoStreamName { get; set; }
+        public int onlineNum { get; set; }
+        public int price { get; set; }
+        public bool isPlaying { get; set; }
+        public string shareTitle { get; set; }
+        public string shareContent { get; set; }
+        public string sharePic { get; set; }
+        public string shareUrl { get; set; }
     }
 
     public class UserAction
