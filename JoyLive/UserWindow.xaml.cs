@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -104,6 +104,7 @@ namespace JoyLive
             textAnnouncement.Text = userInfo.signature;
             textFans.Text = userInfo.fansNum;
             textLiveSince.Text = userInfo.birthday;
+            textViewer.Text = user.onlineNum.ToString();
         }
 
         private void LockButton(bool state)

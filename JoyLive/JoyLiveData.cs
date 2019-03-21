@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace JoyLive
 {
@@ -48,7 +48,7 @@ namespace JoyLive
         public string headPic { get; set; }
         public bool isPlaying { get; set; }
         public string status { get; set; }
-        public double onlineNum { get; set; }
+        public int onlineNum { get; set; }
         public string fansNum { get; set; }
         public string announcement { get; set; }
         public string level { get; set; }
