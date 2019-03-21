@@ -48,13 +48,19 @@ namespace JoyLive
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            PasteLink();
+        }
+
+        private bool PasteLink()
+        {
             var paste = Clipboard.GetText();
             if (string.IsNullOrWhiteSpace(paste))
-                return;
+                return false;
             if (!paste.StartsWith("rtmp") && !paste.StartsWith("http"))
-                return;
+                return false;
 
             textInput.Text = paste;
+            return true;
         }
 
         private void LoadUserInfo()
@@ -111,7 +117,9 @@ namespace JoyLive
 
         private void ButtonPaste_Click(object sender, RoutedEventArgs e)
         {
-            Window_Loaded(sender, e);
+            var result = PasteLink();
+            if (!result) return;
+
             ButtonFind_Click(sender, e);
         }
 
