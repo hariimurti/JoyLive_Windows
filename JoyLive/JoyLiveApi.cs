@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using RestSharp;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -135,6 +136,8 @@ namespace JoyLive
             try
             {
                 ResetApi();
+                if (string.IsNullOrWhiteSpace(id)) throw new Exception("ID can't be null");
+
                 var client = new RestClient(BaseAppUrl);
                 client.CookieContainer = ReadCookies();
                 var request = new RestRequest($"room/GetInfo?rid={id}");
@@ -175,7 +178,7 @@ namespace JoyLive
                 isError = true;
                 Console.WriteLine(ex);
                 errorMessage = ex.Message;
-                return null;
+                return new RoomInfo();
             }
         }
 
@@ -184,6 +187,8 @@ namespace JoyLive
             try
             {
                 ResetApi();
+                if (string.IsNullOrWhiteSpace(id)) throw new Exception("ID can't be null");
+
                 var client = new RestClient(BaseAppUrl);
                 client.CookieContainer = ReadCookies();
                 var request = new RestRequest($"user/GetUserInfo?uid={id}");
@@ -224,7 +229,7 @@ namespace JoyLive
                 isError = true;
                 Console.WriteLine(ex);
                 errorMessage = ex.Message;
-                return null;
+                return new UserInfo();
             }
         }
 
@@ -269,7 +274,7 @@ namespace JoyLive
             {
                 isError = true;
                 errorMessage = ex.Message;
-                return null;
+                return new List<User>().ToArray();
             }
         }
 

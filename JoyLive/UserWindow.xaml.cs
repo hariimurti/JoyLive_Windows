@@ -168,6 +168,7 @@ namespace JoyLive
             // parse userInfo to user
             user = new User
             {
+                rid = userInfo.rid,
                 mid = userInfo.id,
                 nickname = userInfo.nickname,
                 announcement = userInfo.signature,
@@ -196,11 +197,18 @@ namespace JoyLive
                 if (App.UseLoginMethod)
                 {
                     var room = await api.GetRoomInfo(user.rid);
-                    textViewer.Text = room.onlineNum.ToString();
-                    SetStatus(room.isPlaying ? "User Online" : "User Offline");
-                    if (room.isPlaying)
+                    if (!api.isError)
                     {
-                        await DumpStream();
+                        textViewer.Text = room.onlineNum.ToString();
+                        SetStatus(room.isPlaying ? "User Online" : "User Offline");
+                        if (room.isPlaying)
+                        {
+                            await DumpStream();
+                        }
+                    }
+                    else
+                    {
+                        SetStatus(api.errorMessage);
                     }
                 }
                 else
@@ -306,16 +314,23 @@ namespace JoyLive
             buttonPlay.IsEnabled = false;
             if (App.UseLoginMethod)
             {
-                var room = await new JoyLiveApi().GetRoomInfo(user.rid);
-                if (room.isPlaying)
+                var api = new JoyLiveApi();
+                var room = await api.GetRoomInfo(user.rid);
+                if (!api.isError)
                 {
-                    Process.Start(user.videoPlayUrl);
-                    SetStatus("Opening stream with default player");
-                    return;
+                    if (room.isPlaying)
+                    {
+                        Process.Start(user.videoPlayUrl);
+                        SetStatus("Opening stream with default player");
+                    }
+                    else
+                    {
+                        SetStatus("User Offline");
+                    }
                 }
                 else
                 {
-                    SetStatus("User Offline");
+                    SetStatus(api.errorMessage);
                 }
             }
             else
