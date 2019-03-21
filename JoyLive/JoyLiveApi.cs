@@ -26,10 +26,16 @@ namespace JoyLive
         {
         }
 
+        private void ResetApi()
+        {
+            isError = false;
+            errorMessage = string.Empty;
+        }
         public async Task<UserInfo> GetUser(string id)
         {
             try
             {
+                ResetApi();
                 var client = new RestClient(BaseAppUrl);
                 client.CookieContainer = new CookieContainer();
                 var request = new RestRequest($"user/GetUserInfo?uid={id}");
@@ -76,6 +82,7 @@ namespace JoyLive
         {
             try
             {
+                ResetApi();
                 var client = new RestClient(BaseMobileUrl);
                 client.CookieContainer = new CookieContainer();
                 var request = new RestRequest("index/getRoomInfo");
