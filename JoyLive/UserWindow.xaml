@@ -121,12 +121,19 @@
                         <RadioButton Name="radioRetry" Content="15m" IsChecked="True" />
                         <RadioButton Name="radioMaxRetry" Content="Max" />
                     </StackPanel>
-                    <Button Width="90" Height="53" Name="buttonDump" Click="ButtonDump_Click" VerticalAlignment="Center">
-                        <StackPanel>
-                            <TextBlock Text="RECORD" HorizontalAlignment="Center"/>
-                            <TextBlock Text="STREAM" HorizontalAlignment="Center"/>
-                        </StackPanel>
-                    </Button>
+                    <StackPanel VerticalAlignment="Center">
+                        <Button Width="90" Height="53" Name="buttonDump" Click="ButtonDump_Click" VerticalAlignment="Center">
+                            <StackPanel>
+                                <TextBlock Text="RECORD" HorizontalAlignment="Center"/>
+                                <TextBlock Text="STREAM" HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Width="90" Height="53" Name="buttonStop" Click="ButtonStop_Click" VerticalAlignment="Center" Visibility="Collapsed">
+                            <StackPanel>
+                                <TextBlock Text="STOP" HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
                 </StackPanel>
             </DockPanel>
         </md:Card>

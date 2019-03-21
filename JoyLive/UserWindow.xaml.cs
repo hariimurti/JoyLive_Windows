@@ -16,9 +16,7 @@ namespace JoyLive
     {
         private User user;
         private Process process;
-        private bool isStopped;
-        private const string button_dump = "Dump Stream";
-        private const string button_stop = "Stop Process";
+        private bool isRecording;
 
         public UserWindow(User user)
         {
@@ -184,18 +182,14 @@ namespace JoyLive
 
         private async void ButtonDump_Click(object sender, RoutedEventArgs e)
         {
-            if (process != null)
-            {
-                isStopped = true;
-                process.Kill();
-                return;
-            }
+            if (isRecording) return;
 
-            buttonDump.Content = button_dump;
+            buttonDump.Visibility = Visibility.Collapsed;
+            buttonStop.Visibility = Visibility.Visible;
 
             var api = new JoyLiveApi();
 
-            isStopped = false;
+            isRecording = true;
             var timestart = DateTime.Now;
             while(true)
             {
@@ -214,13 +208,27 @@ namespace JoyLive
                     await DumpStream();
                 }
 
-                if ((radioNoRetry.IsChecked == true) || isStopped) break;
+                if ((radioNoRetry.IsChecked == true) || !isRecording) break;
                 if ((radioRetry.IsChecked == true) && isTimeRetryOver(timestart)) break;
 
                 await Task.Delay(10000);
             }
 
-            buttonDump.Content = button_stop;
+            isRecording = false;
+            buttonDump.Visibility = Visibility.Visible;
+            buttonStop.Visibility = Visibility.Collapsed;
+        }
+
+        private void ButtonStop_Click(object sender, RoutedEventArgs e)
+        {
+            if (process != null)
+            {
+                isRecording = false;
+                process.Kill();
+            }
+
+            buttonDump.Visibility = Visibility.Visible;
+            buttonStop.Visibility = Visibility.Collapsed;
         }
 
         private bool isTimeRetryOver(DateTime timestart, int minute = 15)
