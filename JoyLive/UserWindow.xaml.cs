@@ -194,6 +194,7 @@ namespace JoyLive
             var timestart = DateTime.Now;
             while(true)
             {
+                var dump = false;
                 if (App.UseLoginMethod)
                 {
                     var room = await api.GetRoomInfo(user.rid);
@@ -203,7 +204,7 @@ namespace JoyLive
                         SetStatus(room.isPlaying ? "User Online" : "User Offline");
                         if (room.isPlaying)
                         {
-                            await DumpStream();
+                            dump = await DumpStream();
                         }
                     }
                     else
@@ -213,11 +214,17 @@ namespace JoyLive
                 }
                 else
                 {
-                    await DumpStream();
+                    dump = await DumpStream();
                 }
 
-                if ((radioNoRetry.IsChecked == true) || !isRecording) break;
-                if ((radioRetry.IsChecked == true) && isTimeRetryOver(timestart)) break;
+                if (dump) timestart = DateTime.Now;
+
+                if (!isRecording) break;
+                if (radioMaxRetry.IsChecked == false)
+                {
+                    if (radioNoRetry.IsChecked == true) break;
+                    if ((radioRetry.IsChecked == true) && isTimeRetryOver(timestart)) break;
+                }
 
                 await Task.Delay(10000);
             }
@@ -259,7 +266,7 @@ namespace JoyLive
             };
     }
 
-        private async Task DumpStream()
+        private async Task<bool> DumpStream()
         {
             var timenow = DateTime.Now.ToString("yyyyMMdd_HHmmss");
             var filename = $"{timenow}_{user.mid}.flv";
@@ -293,6 +300,7 @@ namespace JoyLive
             process?.Dispose();
             process = null;
 
+            var result = false;
             try
             {
                 var output = new FileInfo(filepath);
@@ -304,9 +312,11 @@ namespace JoyLive
                 else
                 {
                     SetStatus($"Saved as : {filename}");
+                    result = true;
                 }
             }
             catch (Exception) { }
+            return result;
         }
 
         private async void ButtonPlay_Click(object sender, RoutedEventArgs e)
