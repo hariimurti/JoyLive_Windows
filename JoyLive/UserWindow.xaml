@@ -113,11 +113,20 @@
             <DockPanel LastChildFill="False" Height="60" Margin="10,0" VerticalAlignment="Top">
                 <StackPanel Orientation="Vertical">
                     <TextBlock Text="Status :" VerticalAlignment="Center" Margin="0,3,0,10" />
-                    <TextBox Name="textStatus" IsReadOnly="True" Width="345" VerticalAlignment="Bottom" />
+                    <TextBox Name="textStatus" IsReadOnly="True" Width="320" VerticalAlignment="Bottom" />
                 </StackPanel>
-                <StackPanel Orientation="Vertical" DockPanel.Dock="Right">
-                    <CheckBox Margin="0,0,4,5" Name="checkboxForever" Content="Maximum Retry" VerticalAlignment="Center" HorizontalAlignment="Center" />
-                    <Button Width="120" Name="buttonDump" Content="Dump Stream" Click="ButtonDump_Click" VerticalAlignment="Center" />
+                <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
+                    <StackPanel Orientation="Vertical" Margin="0,0,10,0" VerticalAlignment="Center">
+                        <RadioButton Name="radioNoRetry" Content="No" />
+                        <RadioButton Name="radioRetry" Content="15m" IsChecked="True" />
+                        <RadioButton Name="radioMaxRetry" Content="Max" />
+                    </StackPanel>
+                    <Button Width="90" Height="53" Name="buttonDump" Click="ButtonDump_Click" VerticalAlignment="Center">
+                        <StackPanel>
+                            <TextBlock Text="RECORD" HorizontalAlignment="Center"/>
+                            <TextBlock Text="STREAM" HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
                 </StackPanel>
             </DockPanel>
         </md:Card>

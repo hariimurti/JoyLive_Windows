@@ -207,9 +207,8 @@ namespace JoyLive
                     await DumpStream();
                 }
 
-                if (isStopped) break;
-                if (checkboxForever.IsChecked == false) break;
-                if (isTimeRetryOver(timestart)) break;
+                if ((radioNoRetry.IsChecked == true) || isStopped) break;
+                if ((radioRetry.IsChecked == true) && isTimeRetryOver(timestart)) break;
 
                 await Task.Delay(10000);
             }
@@ -217,7 +216,7 @@ namespace JoyLive
             buttonDump.Content = button_stop;
         }
 
-        private bool isTimeRetryOver(DateTime timestart, int minute = 10)
+        private bool isTimeRetryOver(DateTime timestart, int minute = 15)
         {
             var runtime = DateTime.Now - timestart;
             var tfs = TimeSpan.FromSeconds(runtime.TotalSeconds);
