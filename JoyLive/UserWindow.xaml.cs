@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -17,7 +17,6 @@ namespace JoyLive
         private User user;
         private Process process;
         private bool isStopped;
-        private readonly int maxRetry = 100;
         private const string button_dump = "Dump Stream";
         private const string button_stop = "Stop Process";
 
@@ -194,19 +193,35 @@ namespace JoyLive
 
             buttonDump.Content = button_dump;
 
+            var api = new JoyLiveApi();
+
             isStopped = false;
-            int counter = 0;
+            var timestart = DateTime.Now;
             while(true)
             {
-                await DumpStream();
-                if (isStopped || (checkboxForever.IsChecked == false) || (counter > maxRetry))
-                    break;
+                var room = await api.GetRoomInfo(user.rid);
+                textViewer.Text = room.onlineNum.ToString();
+                SetStatus(room.isPlaying ? "User Online" : "User Offline");
+                if (room.isPlaying)
+                {
+                    await DumpStream();
+                }
 
-                await Task.Delay(30000);
-                counter++;
+                if (isStopped) break;
+                if (checkboxForever.IsChecked == false) break;
+                if (isTimeRetryOver(timestart)) break;
+
+                await Task.Delay(10000);
             }
 
             buttonDump.Content = button_stop;
+        }
+
+        private bool isTimeRetryOver(DateTime timestart, int minute = 10)
+        {
+            var runtime = DateTime.Now - timestart;
+            var tfs = TimeSpan.FromSeconds(runtime.TotalSeconds);
+            return (tfs.Minutes >= minute);
         }
 
         private ProcessStartInfo RtmpDump(string url, string filepath)
