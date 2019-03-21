@@ -56,7 +56,7 @@ namespace JoyLive
                 try { File.WriteAllText("JoyUser.json", content); }
                 catch (Exception ex) { Console.WriteLine(ex.Message); }
 
-                var json = JsonConvert.DeserializeObject<JoyLiveUserData>(content);
+                var json = JsonConvert.DeserializeObject<JoyLiveUserInfo>(content);
 
                 return json.data;
             }
@@ -95,7 +95,7 @@ namespace JoyLive
                 try { File.WriteAllText("JoyLive.json", content); }
                 catch (Exception ex) { Console.WriteLine(ex.Message); }
 
-                var json = JsonConvert.DeserializeObject<JoyLiveData>(content);
+                var json = JsonConvert.DeserializeObject<JoyLiveRooms>(content);
 
                 nextPage++;
 

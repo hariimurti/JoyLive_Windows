@@ -1,21 +1,26 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace JoyLive
 {
-    public class JoyLiveData
+    public class JoyLiveBase
     {
         public int errno { get; set; }
         public string msg { get; set; }
-        public Data data { get; set; }
     }
-    public class JoyLiveUserData
+
+    public class JoyLiveRooms : JoyLiveBase
     {
-        public int errno { get; set; }
-        public string msg { get; set; }
+        public Rooms data { get; set; }
+    }
+
+    public class JoyLiveUserInfo : JoyLiveBase
+    {
+        public UserInfo data { get; set; }
+    }
         public UserInfo data { get; set; }
     }
 
-    public class Data
+    public class Rooms
     {
         public User[] rooms { get; set; }
     }
