@@ -45,18 +45,27 @@ namespace JoyLive
             boxStatus.SelectedIndex = index;
         }
 
-        private void ButtonLink_Click(object sender, RoutedEventArgs e)
+        private async void ButtonLink_Click(object sender, RoutedEventArgs e)
         {
             var btn = e.OriginalSource as Button;
             var ua = btn.Tag as UserAction;
 
             if (ua == null) return;
 
+            btn.IsEnabled = false;
             var user = ua.user;
             if (ua.action == UserAction.Action.Play)
             {
-                AddStatus($"Play : {user.nickname} ({user.mid})");
-                Process.Start(user.videoPlayUrl);
+                var room = await new JoyLiveApi().GetRoomInfo(user.rid);
+                if (room.isPlaying)
+                {
+                    Process.Start(user.videoPlayUrl);
+                    AddStatus($"Play : {user.nickname} ({user.mid})");
+                }
+                else
+                {
+                    AddStatus($"{user.nickname} ({user.mid}) - Offline");
+                }
             }
             else
             {
@@ -64,7 +73,7 @@ namespace JoyLive
                 var window = new UserWindow(user);
                 window.Show();
             }
-
+            btn.IsEnabled = true;
         }
 
         private void ButtonFind_Click(object sender, RoutedEventArgs e)

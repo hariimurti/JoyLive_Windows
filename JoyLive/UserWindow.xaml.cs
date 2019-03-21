@@ -286,10 +286,21 @@ namespace JoyLive
             catch (Exception) { }
         }
 
-        private void ButtonPlay_Click(object sender, RoutedEventArgs e)
+        private async void ButtonPlay_Click(object sender, RoutedEventArgs e)
         {
-            Process.Start(user.videoPlayUrl);
-            SetStatus("Opening stream with default player");
+            buttonPlay.IsEnabled = false;
+            var room = await new JoyLiveApi().GetRoomInfo(user.rid);
+            if (room.isPlaying)
+            {
+                Process.Start(user.videoPlayUrl);
+                SetStatus("Opening stream with default player");
+                return;
+            }
+            else
+            {
+                SetStatus("User Offline");
+            }
+            buttonPlay.IsEnabled = true;
         }
 
         private void ButtonCopy_Click(object sender, RoutedEventArgs e)
