@@ -40,6 +40,8 @@ namespace JoyLive
             this.user = user;
             LoadUserInfo(user);
 
+            radioRetry.Content = $"{App.RetryTimeout}m";
+
             SetStatus("Let's start the party...");
         }
 
@@ -253,11 +255,11 @@ namespace JoyLive
             buttonStop.Visibility = Visibility.Collapsed;
         }
 
-        private bool isTimeRetryOver(DateTime timestart, int minute = 15)
+        private bool isTimeRetryOver(DateTime timestart)
         {
             var runtime = DateTime.Now - timestart;
             var tfs = TimeSpan.FromSeconds(runtime.TotalSeconds);
-            return (tfs.Minutes >= minute);
+            return (tfs.Minutes >= App.RetryTimeout);
         }
 
         private ProcessStartInfo RtmpDump(string url, string filepath)

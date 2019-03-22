@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows;
@@ -39,6 +40,9 @@ namespace JoyLive
                     App.UseAccount = login;
                 }
             }
+
+            //read timeout in config
+            int.TryParse(ConfigurationManager.AppSettings["RetryTimeoutInMinute"], out App.RetryTimeout);
 
             await GetNextPage();
             buttonMore.IsEnabled = true;
