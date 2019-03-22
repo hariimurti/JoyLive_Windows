@@ -153,6 +153,8 @@ namespace JoyLive
             buttonPaste.IsEnabled = false;
             buttonFind.IsEnabled = false;
 
+            SetStatus($"Please wait... Get user {id}");
+
             var api = new JoyLiveApi();
             var userInfo = await api.GetUser(id);
 
@@ -192,11 +194,13 @@ namespace JoyLive
 
             isRecording = true;
             var timestart = DateTime.Now;
+            var counter = 0;
             while(true)
             {
                 var dump = false;
                 if (App.UseAccount)
                 {
+                    SetStatus("Please wait... Checking room...");
                     var room = await api.GetRoomInfo(user.rid);
                     if (!api.isError)
                     {
@@ -225,6 +229,9 @@ namespace JoyLive
                     if (radioNoRetry.IsChecked == true) break;
                     if ((radioRetry.IsChecked == true) && isTimeRetryOver(timestart)) break;
                 }
+
+                counter++;
+                SetStatus(textStatus.Text + $" (Retry {counter})");
 
                 await Task.Delay(10000);
             }
