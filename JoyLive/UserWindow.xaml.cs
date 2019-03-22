@@ -329,8 +329,10 @@ namespace JoyLive
 
         private void ButtonCopy_Click(object sender, RoutedEventArgs e)
         {
+            buttonCopy.IsEnabled = false;
             Clipboard.SetText($"{user.nickname} — {user.announcement}\n\n▶️ LiveShow » {user.videoPlayUrl.ToPlaylist()}");
             SetStatus("Link is copied into clipboard");
+            buttonCopy.IsEnabled = true;
         }
 
         private void DataReceivedHandler(object s, DataReceivedEventArgs o)
