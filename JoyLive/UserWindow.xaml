@@ -112,7 +112,10 @@
         <md:Card Margin="10,10,10,0" Padding="6">
             <DockPanel LastChildFill="False" Height="60" Margin="10,0" VerticalAlignment="Top">
                 <StackPanel Orientation="Vertical">
-                    <TextBlock Text="Status :" VerticalAlignment="Center" Margin="0,3,0,10" />
+                    <DockPanel Margin="0,3,0,10" >
+                        <TextBlock Text="Status :" />
+                        <TextBlock Text="Retry :" DockPanel.Dock="Right" TextAlignment="Right" />
+                    </DockPanel>
                     <TextBox Name="textStatus" IsReadOnly="True" Width="320" VerticalAlignment="Bottom" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
