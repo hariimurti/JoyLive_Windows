@@ -319,35 +319,11 @@ namespace JoyLive
             return result;
         }
 
-        private async void ButtonPlay_Click(object sender, RoutedEventArgs e)
+        private void ButtonPlay_Click(object sender, RoutedEventArgs e)
         {
             buttonPlay.IsEnabled = false;
-            if (App.UseAccount)
-            {
-                var api = new JoyLiveApi();
-                var room = await api.GetRoomInfo(user.rid);
-                if (!api.isError)
-                {
-                    if (room.isPlaying)
-                    {
-                        Process.Start(user.videoPlayUrl);
-                        SetStatus("Opening stream with default player");
-                    }
-                    else
-                    {
-                        SetStatus("User Offline");
-                    }
-                }
-                else
-                {
-                    SetStatus(api.errorMessage);
-                }
-            }
-            else
-            {
-                Process.Start(user.videoPlayUrl);
-                SetStatus("Opening stream with default player");
-            }
+            Process.Start(user.videoPlayUrl);
+            SetStatus("Opening stream with default player");
             buttonPlay.IsEnabled = true;
         }
 
