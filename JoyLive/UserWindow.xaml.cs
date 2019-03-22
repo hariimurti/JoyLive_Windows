@@ -195,7 +195,7 @@ namespace JoyLive
             while(true)
             {
                 var dump = false;
-                if (App.UseLoginMethod)
+                if (App.UseAccount)
                 {
                     var room = await api.GetRoomInfo(user.rid);
                     if (!api.isError)
@@ -322,7 +322,7 @@ namespace JoyLive
         private async void ButtonPlay_Click(object sender, RoutedEventArgs e)
         {
             buttonPlay.IsEnabled = false;
-            if (App.UseLoginMethod)
+            if (App.UseAccount)
             {
                 var api = new JoyLiveApi();
                 var room = await api.GetRoomInfo(user.rid);

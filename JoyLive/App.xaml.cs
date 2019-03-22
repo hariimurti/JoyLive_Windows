@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
@@ -13,7 +14,7 @@ namespace JoyLive
         public static readonly string WorkingDir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
         public static readonly string OutputDir = GetOutputDir();
         public static readonly string CookiesFile = Path.Combine(WorkingDir, "JoyLive.dat");
-        public static bool UseLoginMethod = false;
+        public static bool UseAccount = ConfigurationManager.AppSettings["Login"].ToLower() == "true";
 
         private static string GetOutputDir()
         {

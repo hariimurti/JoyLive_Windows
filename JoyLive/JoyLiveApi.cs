@@ -2,6 +2,7 @@
 using RestSharp;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Net;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -85,6 +86,13 @@ namespace JoyLive
             try
             {
                 ResetApi();
+
+                var username = ConfigurationManager.AppSettings["Username"];
+                var password = ConfigurationManager.AppSettings["Password"];
+
+                if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
+                    throw new Exception("Please fill the Username & Password!");
+
                 var client = new RestClient(BaseAppUrl);
                 var request = new RestRequest($"user/login");
                 client.CookieContainer = ReadCookies();
@@ -98,10 +106,8 @@ namespace JoyLive
                 request.AddParameter("deviceName", "Google Pixel 2 XL");
                 request.AddParameter("platform", "android");
                 request.AddParameter("remember", "true");
-                request.AddParameter("username", "62895377348858");
-                request.AddParameter("password", "d1jJ8nMd50wzneu3MA2q6JpQuJj5UrbA2RSwCsbtRrEZY1ER2oe/" +
-                    "ZckJMLtwLCKs7YyzY/IEOO4+Xa1NORn8HLZTtQfgHxK4I5ZNOGJsU6aWxuW7Zqr57/" +
-                    "aNZ9epluxpkUu+o3rFtYJWkABUB8rGz70Xzs3J4LB3SnCT2zqKccc=");
+                request.AddParameter("username", username);
+                request.AddParameter("password", password);
                 request.AlwaysMultipartFormData = true;
                 request.Method = Method.POST;
 

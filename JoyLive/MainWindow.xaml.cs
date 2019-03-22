@@ -25,16 +25,19 @@ namespace JoyLive
             AddStatus("Starting...");
             AddStatus("Find Me at https://github.com/hariimurti");
 
-            AddStatus("Checking status...");
-            var api = new JoyLiveApi();
-            var status = await api.isLoggedIn();
-            App.UseLoginMethod = status;
-            AddStatus("Status : " + (status ? "Logged In" : "Logged Out"));
-            if (!status)
+            if (App.UseAccount)
             {
-                var login = await api.Login();
-                AddStatus("Login : " + (login ? "Success" : "Failed"));
-                App.UseLoginMethod = login;
+                AddStatus("Checking status...");
+                var api = new JoyLiveApi();
+                var status = await api.isLoggedIn();
+                App.UseAccount = status;
+                AddStatus("Status : " + (status ? "Logged In" : "Logged Out"));
+                if (!status)
+                {
+                    var login = await api.Login();
+                    AddStatus("Login : " + (login ? "Success" : "Failed"));
+                    App.UseAccount = login;
+                }
             }
 
             await GetNextPage();
