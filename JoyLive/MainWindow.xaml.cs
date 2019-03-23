@@ -167,7 +167,14 @@ namespace JoyLive
 
                 var context = new ListBoxContext(user);
 
-                if (!listBox.Items.Contains(context))
+                var found = false;
+                foreach(ListBoxContext item in listBox.Items)
+                {
+                    if (item.Id == context.Id)
+                        found = true;
+                }
+
+                if (!found)
                 {
                     listBox.Items.Add(context);
                     count++;
