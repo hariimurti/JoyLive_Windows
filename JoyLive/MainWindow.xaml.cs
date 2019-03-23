@@ -24,7 +24,7 @@ namespace JoyLive
         {
             buttonMore.IsEnabled = false;
             AddStatus("Starting...");
-            AddStatus("Find Me at https://github.com/hariimurti");
+            AddStatus("Find Me at https://t.me/paijemdev");
 
             if (App.UseAccount)
             {
