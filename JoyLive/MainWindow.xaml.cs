@@ -177,5 +177,10 @@ namespace JoyLive
                 ButtonFind_Click(sender, e);
             }
         }
+
+        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if (Width > 350) Width = 350;
+        }
     }
 }
