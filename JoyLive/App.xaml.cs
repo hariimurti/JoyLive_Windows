@@ -15,7 +15,7 @@ namespace JoyLive
         public static readonly string OutputDir = GetOutputDir();
         public static readonly string CookiesFile = Path.Combine(WorkingDir, "JoyLive.dat");
         public static int RetryTimeout = 15;
-        public static bool UseAccount = ConfigurationManager.AppSettings["Login"].ToLower() == "true";
+        public static bool UseAccount = Configs.UseLogin();
 
         private static string GetOutputDir()
         {

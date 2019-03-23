@@ -18,14 +18,18 @@ namespace JoyLive
             InitializeComponent();
 
             Title = string.Format("{0} v{1}", Title, App.GetBuildVersion());
+
+            var lastHeight = Configs.GetHeight();
+            if (SystemParameters.PrimaryScreenHeight > lastHeight)
+            {
+                var diff = lastHeight - Height;
+                Height = lastHeight;
+                listBox.MinHeight += diff;
+            }
         }
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            double lastHeight = 550;
-            double.TryParse(ConfigurationManager.AppSettings["WindowHeight"], out lastHeight);
-            Height = lastHeight;
-
             buttonMore.IsEnabled = false;
             AddStatus("Starting...");
             AddStatus("Find Me at https://t.me/paijemdev");
@@ -45,8 +49,7 @@ namespace JoyLive
                 }
             }
 
-            //read timeout in config
-            int.TryParse(ConfigurationManager.AppSettings["RetryTimeoutInMinute"], out App.RetryTimeout);
+            Configs.SetRetryTimeoutValue();
 
             await GetNextPage();
             buttonMore.IsEnabled = true;
@@ -187,9 +190,10 @@ namespace JoyLive
             if (Width > 350) Width = 350;
             if (Height > 550)
             {
-                Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-                config.AppSettings.Settings["WindowHeight"].Value = Height.ToString();
-                config.Save(ConfigurationSaveMode.Modified);
+                if (SystemParameters.PrimaryScreenHeight < Height)
+                    return;
+
+                Configs.SaveHeight(Height);
             }
         }
     }

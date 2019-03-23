@@ -87,8 +87,8 @@ namespace JoyLive
             {
                 ResetApi();
 
-                var username = ConfigurationManager.AppSettings["Username"];
-                var password = ConfigurationManager.AppSettings["Password"];
+                var username = Configs.GetUsername();
+                var password = Configs.GetPassword();
 
                 if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
                     throw new Exception("Please fill the Username & Password!");
