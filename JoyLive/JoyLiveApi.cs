@@ -64,9 +64,9 @@ namespace JoyLive
 
                 Match regex = Regex.Match(content, @"({[\s\S]+})");
                 if (regex.Success)
-                {
                     content = regex.Groups[1].Value;
-                }
+                else
+                    throw new Exception("Response: not json format!");
 
                 var json = JsonConvert.DeserializeObject<JoyLiveUserInfo>(content);
 
@@ -120,9 +120,9 @@ namespace JoyLive
 
                 Match regex = Regex.Match(content, @"({[\s\S]+})");
                 if (regex.Success)
-                {
                     content = regex.Groups[1].Value;
-                }
+                else
+                    throw new Exception("Response: not json format!");
 
                 var json = JsonConvert.DeserializeObject<JoyLiveLogin>(content);
 
@@ -168,9 +168,9 @@ namespace JoyLive
 
                 Match regex = Regex.Match(content, @"({[\s\S]+})");
                 if (regex.Success)
-                {
                     content = regex.Groups[1].Value;
-                }
+                else
+                    throw new Exception("Response: not json format!");
 
                 try { File.WriteAllText("JoyRoom.json", content); }
                 catch (Exception ex) { Console.WriteLine(ex.Message); }
@@ -219,9 +219,9 @@ namespace JoyLive
 
                 Match regex = Regex.Match(content, @"({[\s\S]+})");
                 if (regex.Success)
-                {
                     content = regex.Groups[1].Value;
-                }
+                else
+                    throw new Exception("Response: not json format!");
 
                 try { File.WriteAllText("JoyUser.json", content); }
                 catch (Exception ex) { Console.WriteLine(ex.Message); }
