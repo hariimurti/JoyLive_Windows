@@ -22,6 +22,10 @@ namespace JoyLive
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            double lastHeight = 550;
+            double.TryParse(ConfigurationManager.AppSettings["WindowHeight"], out lastHeight);
+            Height = lastHeight;
+
             buttonMore.IsEnabled = false;
             AddStatus("Starting...");
             AddStatus("Find Me at https://t.me/paijemdev");
@@ -181,6 +185,12 @@ namespace JoyLive
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             if (Width > 350) Width = 350;
+            if (Height > 550)
+            {
+                Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+                config.AppSettings.Settings["WindowHeight"].Value = Height.ToString();
+                config.Save(ConfigurationSaveMode.Modified);
+            }
         }
     }
 }
