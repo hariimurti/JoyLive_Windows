@@ -118,6 +118,13 @@ namespace JoyLive
             buttonDump.IsEnabled = !state;
         }
 
+        private void LockInput(bool state)
+        {
+            textInput.IsReadOnly = state;
+            buttonPaste.IsEnabled = !state;
+            buttonFind.IsEnabled = !state;
+        }
+
         private void ButtonPaste_Click(object sender, RoutedEventArgs e)
         {
             var result = PasteLink();
@@ -134,8 +141,6 @@ namespace JoyLive
                 SetStatus("Input isn't valid!!!");
                 return;
             }
-
-            Console.WriteLine("Input : " + text);
 
             var id = text;
             if (text.StartsWith("rtmp") || text.StartsWith("http"))
@@ -154,17 +159,13 @@ namespace JoyLive
                 return;
             }
 
+            LockInput(true);
             LockButton(true);
-            buttonPaste.IsEnabled = false;
-            buttonFind.IsEnabled = false;
 
             SetStatus($"Get userid: {id}");
 
             var api = new JoyLiveApi();
             var userInfo = await api.GetUser(id);
-
-            buttonPaste.IsEnabled = true;
-            buttonFind.IsEnabled = true;
 
             if (api.isError)
             {
@@ -188,6 +189,7 @@ namespace JoyLive
             if (!api.isError)
                 textViewer.Text = room.isPlaying ? "Online" : "Offline";
 
+            LockInput(false);
             LockButton(false);
 
             SetStatus("Let's start the party");
@@ -197,6 +199,7 @@ namespace JoyLive
         {
             if (isRecording) return;
 
+            LockInput(true);
             buttonDump.Visibility = Visibility.Collapsed;
             buttonStop.Visibility = Visibility.Visible;
 
@@ -255,6 +258,7 @@ namespace JoyLive
             }
 
             isRecording = false;
+            LockInput(false);
             buttonDump.Visibility = Visibility.Visible;
             buttonStop.Visibility = Visibility.Collapsed;
         }
