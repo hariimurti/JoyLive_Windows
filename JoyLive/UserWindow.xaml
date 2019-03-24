@@ -114,7 +114,7 @@
                 <StackPanel Orientation="Vertical">
                     <DockPanel Margin="0,3,0,10" >
                         <TextBlock Text="Status :" />
-                        <TextBlock Text="Retry :" DockPanel.Dock="Right" TextAlignment="Right" />
+                        <TextBlock Text="Retry Timeout :" DockPanel.Dock="Right" TextAlignment="Right" />
                     </DockPanel>
                     <TextBox Name="textStatus" IsReadOnly="True" Width="320" VerticalAlignment="Bottom" />
                 </StackPanel>
