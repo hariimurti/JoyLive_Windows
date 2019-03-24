@@ -155,7 +155,7 @@ namespace JoyLive
             buttonPaste.IsEnabled = false;
             buttonFind.IsEnabled = false;
 
-            SetStatus($"Please wait... Get user {id}");
+            SetStatus($"Get userid: {id}");
 
             var api = new JoyLiveApi();
             var userInfo = await api.GetUser(id);
@@ -202,7 +202,7 @@ namespace JoyLive
                 var dump = false;
                 if (App.UseAccount)
                 {
-                    SetStatus("Please wait... Checking room...");
+                    SetStatus("Checking room...");
                     var room = await api.GetRoomInfo(user.rid);
                     if (!api.isError)
                     {
@@ -223,17 +223,21 @@ namespace JoyLive
                     dump = await DumpStream();
                 }
 
-                if (dump) timestart = DateTime.Now;
+                if (dump)
+                {
+                    timestart = DateTime.Now;
+                    counter = 0;
+                }
 
                 if (!isRecording) break;
                 if (radioMaxRetry.IsChecked == false)
                 {
                     if (radioNoRetry.IsChecked == true) break;
-                    if ((radioRetry.IsChecked == true) && isTimeRetryOver(timestart)) break;
+                    if ((radioRetry.IsChecked == true) && IsTimeRetryOver(timestart)) break;
                 }
 
                 counter++;
-                SetStatus(textStatus.Text + $" (Retry {counter})");
+                SetStatus($"Retry {counter} ...");
 
                 await Task.Delay(10000);
             }
@@ -255,11 +259,12 @@ namespace JoyLive
             buttonStop.Visibility = Visibility.Collapsed;
         }
 
-        private bool isTimeRetryOver(DateTime timestart)
+        private bool IsTimeRetryOver(DateTime timestart)
         {
             var runtime = DateTime.Now - timestart;
-            var tfs = TimeSpan.FromSeconds(runtime.TotalSeconds);
-            return (tfs.Minutes >= App.RetryTimeout);
+            var current = TimeSpan.FromSeconds(runtime.TotalSeconds);
+            var timeout = TimeSpan.FromMinutes(App.RetryTimeout);
+            return (current > timeout);
         }
 
         private ProcessStartInfo RtmpDump(string url, string filepath)
