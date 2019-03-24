@@ -27,6 +27,9 @@ namespace JoyLive
                 Title = "JoyLive — User Finder and Recorder";
 
                 labelLiveSince.Text = "Birthday :";
+                labelViewer.Text = "LiveShow :";
+                textViewer.Text = "Unknown";
+
                 LockButton(true);
 
                 SetStatus("Ready to find user...");
@@ -103,7 +106,7 @@ namespace JoyLive
             textAnnouncement.Text = userInfo.signature;
             textFans.Text = userInfo.fansNum;
             textLiveSince.Text = userInfo.birthday;
-            textViewer.Text = user.onlineNum.ToString();
+            textViewer.Text = "Unknown";
         }
 
         private void LockButton(bool state)
@@ -180,6 +183,11 @@ namespace JoyLive
             };
 
             LoadUserInfo(userInfo);
+
+            var room = await api.GetRoomInfo(user.rid);
+            if (!api.isError)
+                textViewer.Text = room.isPlaying ? "Online" : "Offline";
+
             LockButton(false);
 
             SetStatus("Let's start the party");
@@ -208,6 +216,10 @@ namespace JoyLive
                     {
                         textViewer.Text = room.onlineNum.ToString();
                         SetStatus(room.isPlaying ? "User Online" : "User Offline");
+                        if (labelViewer.Text == "LiveShow :")
+                        {
+                            textViewer.Text = room.isPlaying ? "Online" : "Offline";
+                        }
                         if (room.isPlaying)
                         {
                             dump = await DumpStream();

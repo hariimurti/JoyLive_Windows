@@ -86,7 +86,7 @@
                         </Grid.ColumnDefinitions>
 
                         <TextBlock Grid.Column="0" Name="textLiveSince" Margin="0,0,10,0" VerticalAlignment="Center" />
-                        <TextBlock Grid.Column="1" Text="Viewer :" VerticalAlignment="Center" />
+                        <TextBlock Grid.Column="1" Name="labelViewer"  Text="Viewer :" VerticalAlignment="Center" />
                         <TextBlock Grid.Column="2" Name="textViewer" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" />
                     </Grid>
 
