@@ -13,7 +13,7 @@
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
         Icon="Resources/icon.png"
-        Loaded="Window_Loaded" KeyUp="Window_KeyUp" SizeChanged="Window_SizeChanged">
+        Loaded="Window_Loaded" KeyUp="Window_KeyUp" SizeChanged="Window_SizeChanged" Closed="Window_Closed">
     <Window.Resources>
         <ResourceDictionary Source="ListBoxCustom.xaml" />
     </Window.Resources>

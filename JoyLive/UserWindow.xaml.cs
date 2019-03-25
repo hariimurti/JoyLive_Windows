@@ -208,7 +208,7 @@ namespace JoyLive
             isRecording = true;
             var timestart = DateTime.Now;
             var counter = 0;
-            while(true)
+            while(isRecording)
             {
                 var dump = false;
                 if (App.UseAccount)

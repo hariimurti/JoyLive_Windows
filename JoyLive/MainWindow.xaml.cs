@@ -195,13 +195,12 @@ namespace JoyLive
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             if (Width > 350) Width = 350;
-            if (Height > 550)
-            {
-                if (SystemParameters.PrimaryScreenHeight < Height)
-                    return;
+        }
 
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            if ((Height > 550) && (SystemParameters.PrimaryScreenHeight > Height))
                 Configs.SaveHeight(Height);
-            }
         }
     }
 }
