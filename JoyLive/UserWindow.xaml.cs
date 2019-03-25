@@ -38,7 +38,6 @@ namespace JoyLive
             }
 
             cardFind.Visibility = Visibility.Collapsed;
-            Height = 250;
 
             this.user = user;
             LoadUserInfo(user);
