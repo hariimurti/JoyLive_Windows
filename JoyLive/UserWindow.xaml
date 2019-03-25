@@ -13,7 +13,7 @@
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
-        Loaded="Window_Loaded">
+        Loaded="Window_Loaded" KeyUp="Window_KeyUp">
     <StackPanel>
         <md:Card Margin="10,10,10,0" Padding="6" Name="cardFind">
             <StackPanel Margin="10,0">

@@ -24,16 +24,9 @@ namespace JoyLive
 
             if (user == null)
             {
-                Title = "JoyLive — User Finder and Recorder";
-
-                labelLiveSince.Text = "Birthday :";
-                labelViewer.Text = "LiveShow :";
-                textViewer.Text = "Unknown";
-
-                LockButton(true);
+                LockButtonAndReset(true);
 
                 SetStatus("Ready to find user...");
-
                 return;
             }
 
@@ -64,6 +57,13 @@ namespace JoyLive
             return true;
         }
 
+        private void LabelFindMode(bool findMode = true)
+        {
+            labelLiveSince.Text = findMode ? "Birthday :" : "Live Since :";
+            labelViewer.Text = findMode ? "LiveShow :" : "Viewer :";
+            textViewer.Text = findMode ? "Unknown" : "0";
+        }
+
         private void LoadUserInfo()
         {
             Title = "JoyLive — User Finder and Recorder";
@@ -74,6 +74,8 @@ namespace JoyLive
             textAnnouncement.Text = ". . . .";
             textFans.Text = "0";
             textLiveSince.Text = "0000-00-00";
+
+            LabelFindMode();
         }
 
         private void LoadUserInfo(User user)
@@ -90,6 +92,8 @@ namespace JoyLive
             textLiveSince.Text = user.playStartTime.ToHumanReadableFormat();
             textViewer.Text = user.onlineNum.ToString();
             textFans.Text = user.fansNum;
+
+            LabelFindMode(false);
         }
 
         private void LoadUserInfo(UserInfo userInfo)
@@ -106,15 +110,18 @@ namespace JoyLive
             textFans.Text = userInfo.fansNum;
             textLiveSince.Text = userInfo.birthday;
             textViewer.Text = "Unknown";
+
+            LabelFindMode();
         }
 
-        private void LockButton(bool state)
+        private void LockButtonAndReset(bool state)
         {
             if (state) LoadUserInfo();
 
             buttonCopy.IsEnabled = !state;
             buttonPlay.IsEnabled = !state;
             buttonDump.IsEnabled = !state;
+            buttonStop.IsEnabled = !state;
         }
 
         private void LockInput(bool state)
@@ -159,7 +166,7 @@ namespace JoyLive
             }
 
             LockInput(true);
-            LockButton(true);
+            LockButtonAndReset(true);
 
             SetStatus($"Get userid: {id}");
 
@@ -192,7 +199,7 @@ namespace JoyLive
             }
 
             LockInput(false);
-            LockButton(false);
+            LockButtonAndReset(false);
 
             SetStatus("Let's start the party");
         }
@@ -381,6 +388,19 @@ namespace JoyLive
                 Dispatcher.Invoke(() => textStatus.Text = $"{time} » {text}");
             }
             catch (Exception) { }
+        }
+
+        private void Window_KeyUp(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (e.Key == System.Windows.Input.Key.F12)
+            {
+                if (isRecording) return;
+
+                PasteLink();
+
+                var isCollapsed = (cardFind.Visibility == Visibility.Collapsed);
+                cardFind.Visibility = isCollapsed ? Visibility.Visible : Visibility.Collapsed;
+            }
         }
     }
 }
