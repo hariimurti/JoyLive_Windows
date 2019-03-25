@@ -209,6 +209,7 @@ namespace JoyLive
             if (isRecording) return;
 
             LockInput(true);
+            cardFind.Visibility = Visibility.Collapsed;
             buttonDump.Visibility = Visibility.Collapsed;
             buttonStop.Visibility = Visibility.Visible;
 
