@@ -1,7 +1,10 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
+using System.DirectoryServices.AccountManagement;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Windows;
 
 namespace JoyLive
@@ -37,6 +40,22 @@ namespace JoyLive
             var version = attrb?.ConstructorArguments[0].Value.ToString();
             if (string.IsNullOrWhiteSpace(version)) version = "0.0";
             return version;
+        }
+
+        public static string GetSID()
+        {
+            var sid = UserPrincipal.Current.Sid.ToString();
+            var username = Environment.UserName;
+
+            Match match = Regex.Match(sid, @"-\d{2}-([\d-]+)-");
+            if (match.Success)
+            {
+                return match.Groups[1].Value.ToUpper();
+            }
+            else
+            {
+                return username.ToHash().ToUpper();
+            }
         }
     }
 }

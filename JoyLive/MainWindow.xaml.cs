@@ -53,6 +53,15 @@ namespace JoyLive
 
             await GetNextPage();
             buttonMore.IsEnabled = true;
+
+            var serial = App.GetSID();
+            var isKeyValid = Configs.IsKeyValid(serial);
+            if (!isKeyValid)
+            {
+                var auth = new AuthWindow();
+                if (auth.ShowDialog() == false)
+                    this.Close();
+            }
         }
 
         private void AddStatus(string text)
