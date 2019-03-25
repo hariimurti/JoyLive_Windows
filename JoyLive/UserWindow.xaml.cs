@@ -186,7 +186,10 @@ namespace JoyLive
 
             var room = await api.GetRoomInfo(user.rid);
             if (!api.isError)
+            {
                 textViewer.Text = room.isPlaying ? "Online" : "Offline";
+                if (room.isPlaying) cardFind.Visibility = Visibility.Collapsed;
+            }
 
             LockInput(false);
             LockButton(false);
