@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -61,7 +62,17 @@ namespace JoyLive
             var key = GetKey();
             if (!string.IsNullOrWhiteSpace(key))
             {
-                if (key == "cantikmahbebas") return true;
+                var master = Path.Combine(App.WorkingDir, "master.key");
+                if (File.Exists(master))
+                {
+                    try
+                    {
+                        if (File.ReadAllText(master) == "4iCe2pTU0L0yux4fc2QVMg==".ToDecrypt())
+                            return true;
+                    }
+                    catch (Exception)
+                    { }
+                }
                 return (key.ToDecrypt() == serial);
             }
             return false;
@@ -69,7 +80,7 @@ namespace JoyLive
 
         public static bool SaveKeyIfValid(string serial, string key)
         {
-            if (serial.ToEncrypt() == key)
+            if (serial == key.ToDecrypt())
             {
                 SetKey(key);
                 return true;

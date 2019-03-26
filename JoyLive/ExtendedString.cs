@@ -69,65 +69,25 @@ namespace JoyLive
             return string.Join("-", hash.SplitInParts(11));
         }
 
-        public static string ToEncrypt(this string text)
+        public static string ToDecrypt(this string encrypted)
         {
             try
             {
-                byte[] results;
-                var utf8 = new UTF8Encoding();
-                var hashProvider = new MD5CryptoServiceProvider();
-                var computeHash = hashProvider.ComputeHash(utf8.GetBytes("JoyLive"));
-                var tdesAlgorithm = new TripleDESCryptoServiceProvider()
+                using (var csp = new AesCryptoServiceProvider())
                 {
-                    Key = computeHash,
-                    Mode = CipherMode.ECB,
-                    Padding = PaddingMode.PKCS7
-                };
-                var dataToEncrypt = utf8.GetBytes(text);
-                try
-                {
-                    var encryptor = tdesAlgorithm.CreateEncryptor();
-                    results = encryptor.TransformFinalBlock(dataToEncrypt, 0, dataToEncrypt.Length);
+                    csp.Mode = CipherMode.CBC;
+                    csp.Padding = PaddingMode.PKCS7;
+                    var spec = new Rfc2898DeriveBytes(
+                        Encoding.UTF8.GetBytes("C0L1-T3RU5-S4MP3-P3G3L"),
+                        Encoding.UTF8.GetBytes("CR4CK3R?FUCK-Y0U-KAL14N"),
+                        65536);
+                    csp.Key = spec.GetBytes(16);
+                    csp.IV = Encoding.UTF8.GetBytes("2019032662309102");
+                    var decryptor = csp.CreateDecryptor();
+                    byte[] output = Convert.FromBase64String(encrypted);
+                    byte[] decryptedOutput = decryptor.TransformFinalBlock(output, 0, output.Length);
+                    return Encoding.UTF8.GetString(decryptedOutput);
                 }
-                finally
-                {
-                    tdesAlgorithm.Clear();
-                    hashProvider.Clear();
-                }
-                return Convert.ToBase64String(results);
-            }
-            catch (Exception)
-            {
-                return string.Empty;
-            }
-        }
-
-        public static string ToDecrypt(this string text)
-        {
-            try
-            {
-                byte[] results;
-                UTF8Encoding utf8 = new UTF8Encoding();
-                MD5CryptoServiceProvider hashProvider = new MD5CryptoServiceProvider();
-                byte[] computeHash = hashProvider.ComputeHash(utf8.GetBytes("JoyLive"));
-                var tdesAlgorithm = new TripleDESCryptoServiceProvider()
-                {
-                    Key = computeHash,
-                    Mode = CipherMode.ECB,
-                    Padding = PaddingMode.PKCS7
-                };
-                byte[] dataToDecrypt = Convert.FromBase64String(text);
-                try
-                {
-                    var decryptor = tdesAlgorithm.CreateDecryptor();
-                    results = decryptor.TransformFinalBlock(dataToDecrypt, 0, dataToDecrypt.Length);
-                }
-                finally
-                {
-                    tdesAlgorithm.Clear();
-                    hashProvider.Clear();
-                }
-                return utf8.GetString(results);
             }
             catch (Exception)
             {
