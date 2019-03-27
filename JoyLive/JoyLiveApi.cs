@@ -2,7 +2,6 @@
 using RestSharp;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.IO;
 using System.Net;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -17,6 +16,7 @@ namespace JoyLive
         public static readonly string BaseMobileUrl = "http://m.joylive.tv";
         public static readonly string BaseAppUrl = "http://app.joylive.tv";
         public static readonly string UserAgentGogoLive = "Gogo.Live 2.7.6";
+
         public static readonly string UserAgentBrowser = "Mozilla/5.0 (Linux; Android 9; Pixel 2 XL) " +
             "AppleWebKit/537.36 (KHTML, like Gecko) " +
             "Chrome/71.0.3578.98 Mobile Safari/537.36";
@@ -198,7 +198,7 @@ namespace JoyLive
                 var client = new RestClient(BaseAppUrl);
                 client.CookieContainer = ReadCookies();
                 var request = new RestRequest($"user/GetUserInfo?uid={id}");
-                request.AddHeader("Host", BaseAppUrl.Replace("http://",""));
+                request.AddHeader("Host", BaseAppUrl.Replace("http://", ""));
                 request.AddHeader("Connection", "keep-alive");
                 request.AddHeader("User-Agent", UserAgentGogoLive);
                 request.AddParameter("androidVersion", "9");
@@ -248,7 +248,7 @@ namespace JoyLive
                 client.CookieContainer = ReadCookies();
                 var request = new RestRequest("index/getRoomInfo");
                 request.AddParameter("page", nextPage);
-                request.AddHeader("Host", BaseMobileUrl.Replace("http://",""));
+                request.AddHeader("Host", BaseMobileUrl.Replace("http://", ""));
                 request.AddHeader("Connection", "keep-alive");
                 request.AddHeader("Accept", "application/json");
                 request.AddHeader("Origin", BaseMobileUrl);

@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace JoyLive
 {
-    class Configs
+    internal class Configs
     {
         private static Configuration cfg = ConfigurationManager
             .OpenExeConfiguration(ConfigurationUserLevel.None);

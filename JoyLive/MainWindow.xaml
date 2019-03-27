@@ -19,10 +19,10 @@
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        
+
         <md:Card Grid.Row="0" Padding="10" Margin="10,10,10,0">
             <DockPanel LastChildFill="True">
                 <DockPanel DockPanel.Dock="Bottom" LastChildFill="True" Margin="0,10,0,0">
@@ -62,7 +62,7 @@
                         </StackPanel>
                     </Button>
                 </DockPanel>
-                
+
                 <ListBox
                     DockPanel.Dock="Top"
                     Name="listBox"

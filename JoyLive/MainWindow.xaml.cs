@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Configuration;
 using System.Diagnostics;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 
 namespace JoyLive
 {
@@ -189,7 +186,7 @@ namespace JoyLive
                     var context = new ListBoxContext(user);
 
                     var found = false;
-                    foreach(ListBoxContext item in listBox.Items)
+                    foreach (ListBoxContext item in listBox.Items)
                     {
                         if (item.Id == context.Id)
                             found = true;

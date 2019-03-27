@@ -25,18 +25,18 @@
                 </DockPanel>
             </StackPanel>
         </md:Card>
-        
+
         <md:Card Margin="10,10,10,0" Padding="10">
-            <DockPanel LastChildFill="True" >
+            <DockPanel LastChildFill="True">
                 <Border DockPanel.Dock="Left" Grid.Row="0" Grid.RowSpan="4" Grid.Column="0"
                         Width="90" Height="90"
                         BorderThickness="1" BorderBrush="{DynamicResource MaterialDesignBody}"
-                        VerticalAlignment="Center" >
+                        VerticalAlignment="Center">
                     <Image Name="imageProfile" Width="Auto" Height="Auto" />
                 </Border>
-                
+
                 <Separator Width="10" Background="{x:Null}" />
-                
+
                 <Grid DockPanel.Dock="Right" Height="90" VerticalAlignment="Top">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="1.5*" />
@@ -114,7 +114,7 @@
         <md:Card Margin="10,10,10,10" Padding="6">
             <DockPanel LastChildFill="False" Height="60" Margin="10,0" VerticalAlignment="Top">
                 <StackPanel Orientation="Vertical">
-                    <DockPanel Margin="0,3,0,10" >
+                    <DockPanel Margin="0,3,0,10">
                         <TextBlock Text="Status :" />
                         <TextBlock Text="Retry Timeout :" DockPanel.Dock="Right" TextAlignment="Right" />
                     </DockPanel>
@@ -129,13 +129,13 @@
                     <StackPanel VerticalAlignment="Center">
                         <Button Width="90" Height="53" Name="buttonDump" Click="ButtonDump_Click" VerticalAlignment="Center">
                             <StackPanel>
-                                <TextBlock Text="RECORD" HorizontalAlignment="Center"/>
-                                <TextBlock Text="STREAM" HorizontalAlignment="Center"/>
+                                <TextBlock Text="RECORD" HorizontalAlignment="Center" />
+                                <TextBlock Text="STREAM" HorizontalAlignment="Center" />
                             </StackPanel>
                         </Button>
                         <Button Width="90" Height="53" Name="buttonStop" Click="ButtonStop_Click" VerticalAlignment="Center" Visibility="Collapsed">
                             <StackPanel>
-                                <TextBlock Text="STOP" HorizontalAlignment="Center"/>
+                                <TextBlock Text="STOP" HorizontalAlignment="Center" />
                             </StackPanel>
                         </Button>
                     </StackPanel>

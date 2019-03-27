@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Configuration;
 using System.DirectoryServices.AccountManagement;
 using System.IO;
 using System.Linq;

@@ -53,8 +53,10 @@ namespace JoyLive
         public string announcement { get; set; }
         public string level { get; set; }
         public string moderatorLevel { get; set; }
+
         //public bool verified { get; set; }
         public string videoPlayUrl { get; set; }
+
         public int price { get; set; }
 
         public List<string> blacklist = new List<string>() { "2170276", "79041", "51987", "24499" };
