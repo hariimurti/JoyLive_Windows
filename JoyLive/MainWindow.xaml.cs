@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Configuration;
 using System.Diagnostics;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -66,9 +67,12 @@ namespace JoyLive
 
         private void AddStatus(string text)
         {
-            var time = DateTime.Now.ToString("HH:mm:ss");
-            var index = boxStatus.Items.Add($"{time} » {text}");
-            boxStatus.SelectedIndex = index;
+            Dispatcher.Invoke(() =>
+            {
+                var time = DateTime.Now.ToString("HH:mm:ss");
+                var index = boxStatus.Items.Add($"{time} » {text}");
+                boxStatus.SelectedIndex = index;
+            });
         }
 
         private void ButtonLink_Click(object sender, RoutedEventArgs e)
@@ -122,7 +126,10 @@ namespace JoyLive
             var users = await api.Reset();
             if (!api.isError)
             {
-                InsertUsers(users, true);
+                await Task.Run(() =>
+                {
+                    InsertUsers(users, true);
+                });
             }
             else
             {
@@ -150,7 +157,10 @@ namespace JoyLive
             var users = await api.GetRoomInfo();
             if (!api.isError)
             {
-                InsertUsers(users);
+                await Task.Run(() =>
+                {
+                    InsertUsers(users);
+                });
             }
             else
             {
@@ -163,34 +173,37 @@ namespace JoyLive
 
         private void InsertUsers(User[] users, bool reset = false)
         {
-            int count = 0;
-            if (reset) listBox.Items.Clear();
-
-            foreach (var user in users)
+            Dispatcher.Invoke(() =>
             {
-                //only female & unknown
-                if (user.sex == "1") continue;
+                int count = 0;
+                if (reset) listBox.Items.Clear();
 
-                //check blacklist
-                if (user.blacklist.Contains(user.mid)) continue;
-
-                var context = new ListBoxContext(user);
-
-                var found = false;
-                foreach(ListBoxContext item in listBox.Items)
+                foreach (var user in users)
                 {
-                    if (item.Id == context.Id)
-                        found = true;
+                    //only female & unknown
+                    if (user.sex == "1") continue;
+
+                    //check blacklist
+                    if (user.blacklist.Contains(user.mid)) continue;
+
+                    var context = new ListBoxContext(user);
+
+                    var found = false;
+                    foreach(ListBoxContext item in listBox.Items)
+                    {
+                        if (item.Id == context.Id)
+                            found = true;
+                    }
+
+                    if (!found)
+                    {
+                        listBox.Items.Add(context);
+                        count++;
+                    }
                 }
 
-                if (!found)
-                {
-                    listBox.Items.Add(context);
-                    count++;
-                }
-            }
-
-            if (count > 0) AddStatus($"Added {count} new users");
+                if (count > 0) AddStatus($"Added {count} new users");
+            });
         }
 
         private void Window_KeyUp(object sender, System.Windows.Input.KeyEventArgs e)

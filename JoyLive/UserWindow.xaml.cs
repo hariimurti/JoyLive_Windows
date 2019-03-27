@@ -275,11 +275,8 @@ namespace JoyLive
 
         private void ButtonStop_Click(object sender, RoutedEventArgs e)
         {
-            if (process != null)
-            {
-                isRecording = false;
-                process.Kill();
-            }
+            isRecording = false;
+            if (process != null) process.Kill();
 
             buttonDump.Visibility = Visibility.Visible;
             buttonStop.Visibility = Visibility.Collapsed;
@@ -371,7 +368,7 @@ namespace JoyLive
         {
             buttonCopy.IsEnabled = false;
             Clipboard.SetText($"{user.nickname} — {user.announcement}\n\n▶️ LiveShow » {user.videoPlayUrl.ToPlaylist()}");
-            SetStatus("Link is copied into clipboard");
+            SetStatus("Copied into clipboard");
             buttonCopy.IsEnabled = true;
         }
 
