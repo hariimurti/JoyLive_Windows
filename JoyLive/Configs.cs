@@ -24,7 +24,7 @@ namespace JoyLive
 
         public static void SetRetryTimeoutValue()
         {
-            int.TryParse(ConfigurationManager.AppSettings["RetryTimeoutInMinute"], out App.RetryTimeout);
+            int.TryParse(ConfigurationManager.AppSettings["TimeoutInMinute"], out App.RetryTimeout);
         }
 
         public static bool UseLogin()

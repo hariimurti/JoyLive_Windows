@@ -35,7 +35,7 @@ namespace JoyLive
             this.user = user;
             LoadUserInfo(user);
 
-            radioRetry.Content = $"{App.RetryTimeout}m";
+            radioCustomTimeout.Content = $"{App.RetryTimeout}m";
 
             SetStatus("Let's start the party...");
         }
@@ -217,7 +217,6 @@ namespace JoyLive
 
             isRecording = true;
             var timestart = DateTime.Now;
-            var counter = 0;
             while (isRecording)
             {
                 var dump = false;
@@ -248,21 +247,25 @@ namespace JoyLive
                     dump = await DumpStream();
                 }
 
-                if (dump)
-                {
-                    timestart = DateTime.Now;
-                    counter = 0;
-                }
+                if (dump) timestart = DateTime.Now;
 
                 if (!isRecording) break;
-                if (radioMaxRetry.IsChecked == false)
+                if (radioManual.IsChecked == false)
                 {
-                    if (radioNoRetry.IsChecked == true) break;
-                    if ((radioRetry.IsChecked == true) && IsTimeRetryOver(timestart)) break;
-                }
+                    if (radioImmediately.IsChecked == true) break;
+                    if (radioCustomTimeout.IsChecked == true)
+                    {
+                        if (IsTimeout(timestart))
+                            break;
 
-                counter++;
-                SetStatus($"Retry {counter} ...");
+                        var to = Timeout(timestart);
+                        SetStatus($"Timeout in {to.Minutes.ToString("00")}:{to.Seconds.ToString("00")}");
+                    }
+                }
+                else
+                {
+                    SetStatus("Please wait... Retry in 10s");
+                }
 
                 await Task.Delay(10000);
             }
@@ -282,7 +285,14 @@ namespace JoyLive
             buttonStop.Visibility = Visibility.Collapsed;
         }
 
-        private bool IsTimeRetryOver(DateTime timestart)
+        private TimeSpan Timeout(DateTime timestart)
+        {
+            var runtime = DateTime.Now - timestart;
+            var current = TimeSpan.FromSeconds(runtime.TotalSeconds);
+            return TimeSpan.FromMinutes(App.RetryTimeout) - current;
+        }
+
+        private bool IsTimeout(DateTime timestart)
         {
             var runtime = DateTime.Now - timestart;
             var current = TimeSpan.FromSeconds(runtime.TotalSeconds);
