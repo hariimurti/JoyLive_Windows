@@ -62,7 +62,7 @@ namespace JoyLive
                 WriteCookies(client.CookieContainer);
                 cts.Dispose();
 
-                Match regex = Regex.Match(content, @"({[\s\S]+})");
+                Match regex = Regex.Match(content, "({.*})");
                 if (regex.Success)
                     content = regex.Groups[1].Value;
                 else
@@ -70,7 +70,7 @@ namespace JoyLive
 
                 var json = JsonConvert.DeserializeObject<JoyLiveUserInfo>(content);
 
-                return (json.errno != 100);
+                return (json.errno != -100);
             }
             catch (Exception ex)
             {
@@ -118,7 +118,7 @@ namespace JoyLive
                 WriteCookies(client.CookieContainer);
                 cts.Dispose();
 
-                Match regex = Regex.Match(content, @"({[\s\S]+})");
+                Match regex = Regex.Match(content, "({.*})");
                 if (regex.Success)
                     content = regex.Groups[1].Value;
                 else
@@ -166,7 +166,7 @@ namespace JoyLive
                 WriteCookies(client.CookieContainer);
                 cts.Dispose();
 
-                Match regex = Regex.Match(content, @"({[\s\S]+})");
+                Match regex = Regex.Match(content, "({.*})");
                 if (regex.Success)
                     content = regex.Groups[1].Value;
                 else
@@ -176,6 +176,8 @@ namespace JoyLive
                 catch (Exception ex) { Console.WriteLine(ex.Message); }
 
                 var json = JsonConvert.DeserializeObject<JoyLiveRoomInfo>(content);
+
+                if (json.errno == -100) await Login();
 
                 return json.data;
             }
@@ -217,7 +219,7 @@ namespace JoyLive
                 WriteCookies(client.CookieContainer);
                 cts.Dispose();
 
-                Match regex = Regex.Match(content, @"({[\s\S]+})");
+                Match regex = Regex.Match(content, "({.*})");
                 if (regex.Success)
                     content = regex.Groups[1].Value;
                 else
