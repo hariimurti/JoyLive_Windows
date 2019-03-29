@@ -137,7 +137,7 @@ namespace JoyLive
             }
         }
 
-        public async Task<RoomInfo> GetRoomInfo(string id)
+        public async Task<RoomInfo> GetRoomInfo(string id, bool autoLogin = true)
         {
             try
             {
@@ -177,7 +177,15 @@ namespace JoyLive
 
                 var json = JsonConvert.DeserializeObject<JoyLiveRoomInfo>(content);
 
-                if (json.errno == -100) await Login();
+                if (json.errno == -100)
+                {
+                    json.data = new RoomInfo();
+                    if (autoLogin)
+                    {
+                        if (await Login())
+                            return await GetRoomInfo(id, false);
+                    }
+                }
 
                 return json.data;
             }
