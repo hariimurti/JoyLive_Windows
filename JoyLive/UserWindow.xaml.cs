@@ -211,6 +211,12 @@ namespace JoyLive
         {
             if (isRecording) return;
 
+            if (string.IsNullOrWhiteSpace(user.videoPlayUrl))
+            {
+                SetStatus("[Error] Can't find the stream link");
+                return;
+            }
+
             LockInput(true);
             cardFind.Visibility = Visibility.Collapsed;
             buttonDump.Visibility = Visibility.Collapsed;
@@ -371,14 +377,26 @@ namespace JoyLive
 
         private void ButtonPlay_Click(object sender, RoutedEventArgs e)
         {
+            if (string.IsNullOrWhiteSpace(user.videoPlayUrl))
+            {
+                SetStatus("[Error] Can't find the stream link");
+                return;
+            }
+
             buttonPlay.IsEnabled = false;
             Process.Start(user.videoPlayUrl);
-            SetStatus("Opening stream with default player");
+            SetStatus("Play stream with default player");
             buttonPlay.IsEnabled = true;
         }
 
         private void ButtonCopy_Click(object sender, RoutedEventArgs e)
         {
+            if (string.IsNullOrWhiteSpace(user.videoPlayUrl))
+            {
+                SetStatus("[Error] Can't find the stream link");
+                return;
+            }
+
             buttonCopy.IsEnabled = false;
             Clipboard.SetText($"{user.nickname} — {user.announcement}\n\n▶️ LiveShow » {user.videoPlayUrl.ToPlaylist()}");
             SetStatus("Copied into clipboard");
