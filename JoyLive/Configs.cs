@@ -22,6 +22,25 @@ namespace JoyLive
             cfg.Save(ConfigurationSaveMode.Modified);
         }
 
+        public static double GetWindowTop()
+        {
+            double.TryParse(ConfigurationManager.AppSettings["WindowTop"], out double value);
+            return value;
+        }
+
+        public static double GetWindowLeft()
+        {
+            double.TryParse(ConfigurationManager.AppSettings["WindowLeft"], out double value);
+            return value;
+        }
+
+        public static void SaveWindow(double top, double left)
+        {
+            cfg.AppSettings.Settings["WindowTop"].Value = top.ToString();
+            cfg.AppSettings.Settings["WindowLeft"].Value = left.ToString();
+            cfg.Save(ConfigurationSaveMode.Modified);
+        }
+
         public static void SetRetryTimeoutValue()
         {
             int.TryParse(ConfigurationManager.AppSettings["TimeoutInMinute"], out App.RetryTimeout);

@@ -24,6 +24,14 @@ namespace JoyLive
                 Height = lastHeight;
                 listBox.MinHeight += diff;
             }
+
+            var top = Configs.GetWindowTop();
+            var left = Configs.GetWindowLeft();
+            if (top != 0 || left != 0)
+            {
+                Top = top;
+                Left = left;
+            }
         }
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
@@ -220,6 +228,8 @@ namespace JoyLive
         {
             if ((Height > 550) && (SystemParameters.PrimaryScreenHeight > Height))
                 Configs.SaveHeight(Height);
+
+            Configs.SaveWindow(Top, Left);
         }
     }
 }

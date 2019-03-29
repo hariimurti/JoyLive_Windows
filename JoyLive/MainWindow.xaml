@@ -9,6 +9,7 @@
         Title="JoyLive — Unofficial"
         Height="550" Width="350"
         MinHeight="550" MinWidth="350"
+        WindowStartupLocation="CenterOwner"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
