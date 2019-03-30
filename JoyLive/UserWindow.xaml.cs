@@ -225,31 +225,35 @@ namespace JoyLive
             var api = new JoyLiveApi();
 
             isRecording = true;
+            var firsttime = true;
             var timestart = DateTime.Now;
             while (isRecording)
             {
                 var dump = false;
                 if (App.UseAccount)
                 {
-                    SetStatus("Checking room...");
-                    var room = await api.GetRoomInfo(user.rid);
-                    if (!api.isError)
+                    var isPlaying = false;
+
+                    if (!firsttime)
                     {
-                        textViewer.Text = room.onlineNum.ToString();
-                        SetStatus(room.isPlaying ? "User Online" : "User Offline");
-                        if (labelViewer.Text == "LiveShow :")
+                        SetStatus("Checking room...");
+                        var room = await api.GetRoomInfo(user.rid);
+                        if (!api.isError)
                         {
-                            textViewer.Text = room.isPlaying ? "Online" : "Offline";
+                            isPlaying = room.isPlaying;
+                            SetStatus(room.isPlaying ? "User Online" : "User Offline");
+                            if (labelViewer.Text == "LiveShow :")
+                                textViewer.Text = room.isPlaying ? "Online" : "Offline";
+                            else
+                                textViewer.Text = room.onlineNum.ToString();
                         }
-                        if (room.isPlaying)
-                        {
-                            dump = await DumpStream();
-                        }
+                        else SetStatus(api.errorMessage);
                     }
-                    else
-                    {
-                        SetStatus(api.errorMessage);
-                    }
+
+                    if (isPlaying || firsttime)
+                        dump = await DumpStream();
+
+                    firsttime = false;
                 }
                 else
                 {
