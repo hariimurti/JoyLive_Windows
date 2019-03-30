@@ -241,13 +241,15 @@ namespace JoyLive
                         if (!api.isError)
                         {
                             isPlaying = room.isPlaying;
+                            textViewer.Text = room.isPlaying ? "Online" : "Offline";
                             SetStatus(room.isPlaying ? "User Online" : "User Offline");
-                            if (labelViewer.Text == "LiveShow :")
-                                textViewer.Text = room.isPlaying ? "Online" : "Offline";
-                            else
-                                textViewer.Text = room.onlineNum.ToString();
                         }
-                        else SetStatus(api.errorMessage);
+                        else
+                        {
+                            textViewer.Text = "Unknown";
+                            SetStatus(api.errorMessage);
+                        }
+                        labelViewer.Text = "LiveShow :";
                     }
 
                     if (isPlaying || firsttime)
