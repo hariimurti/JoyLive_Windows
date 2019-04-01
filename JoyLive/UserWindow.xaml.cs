@@ -22,6 +22,8 @@ namespace JoyLive
         {
             InitializeComponent();
 
+            radioCustomTimeout.Content = $"{App.RetryTimeout}m";
+
             if (user == null)
             {
                 LockButtonAndReset(true);
@@ -34,8 +36,6 @@ namespace JoyLive
 
             this.user = user;
             LoadUserInfo(user);
-
-            radioCustomTimeout.Content = $"{App.RetryTimeout}m";
 
             SetStatus("Let's start the party...");
         }
@@ -66,6 +66,8 @@ namespace JoyLive
 
         private void LoadUserInfo()
         {
+            LabelFindMode();
+
             Title = "JoyLive — User Finder and Recorder";
             imageProfile.Source = null;
             textId.Text = "0";
@@ -74,14 +76,14 @@ namespace JoyLive
             textAnnouncement.Text = ". . . .";
             textFans.Text = "0";
             textLiveSince.Text = "0000-00-00";
-
-            LabelFindMode();
         }
 
         private void LoadUserInfo(User user)
         {
             if (string.IsNullOrWhiteSpace(user.announcement))
                 user.announcement = "Hey, come and check my show now!";
+
+            LabelFindMode(false);
 
             Title = $"{user.nickname} — {user.announcement}";
             imageProfile.Source = new BitmapImage(new Uri(user.headPic));
@@ -92,14 +94,14 @@ namespace JoyLive
             textLiveSince.Text = user.playStartTime.ToHumanReadableFormat();
             textViewer.Text = user.onlineNum.ToString();
             textFans.Text = user.fansNum;
-
-            LabelFindMode(false);
         }
 
         private void LoadUserInfo(UserInfo userInfo)
         {
             if (string.IsNullOrWhiteSpace(userInfo.signature))
                 userInfo.signature = "Hey, come and check my show now!";
+
+            LabelFindMode();
 
             Title = $"{userInfo.nickname} — {userInfo.signature}";
             imageProfile.Source = new BitmapImage(new Uri(userInfo.headPic));
@@ -110,8 +112,6 @@ namespace JoyLive
             textFans.Text = userInfo.fansNum;
             textLiveSince.Text = userInfo.birthday;
             textViewer.Text = "Unknown";
-
-            LabelFindMode();
         }
 
         private void LockButtonAndReset(bool state)
