@@ -83,8 +83,9 @@ namespace JoyLive
         private void ButtonLink_Click(object sender, RoutedEventArgs e)
         {
             var btn = e.OriginalSource as Button;
-            var ua = btn.Tag as UserAction;
+            if (btn == null) return;
 
+            var ua = btn.Tag as UserAction;
             if (ua == null) return;
 
             btn.IsEnabled = false;
