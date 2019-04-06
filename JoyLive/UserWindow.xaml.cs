@@ -42,19 +42,24 @@ namespace JoyLive
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            PasteLink();
+            PasteLinkOrId();
         }
 
-        private bool PasteLink()
+        private bool PasteLinkOrId()
         {
             var paste = Clipboard.GetText();
             if (string.IsNullOrWhiteSpace(paste))
                 return false;
-            if (!paste.StartsWith("rtmp") && !paste.StartsWith("http"))
-                return false;
 
-            textInput.Text = paste;
-            return true;
+            var link = Regex.IsMatch(paste, "(?:https?|rtmp)://.*/live/.*");
+            var number = Regex.IsMatch(paste, @"^(\d+)$");
+            if (link || number)
+            {
+                textInput.Text = paste;
+                return true;
+            }
+
+            return false;
         }
 
         private void LabelFindMode(bool findMode = true)
@@ -133,7 +138,7 @@ namespace JoyLive
 
         private void ButtonPaste_Click(object sender, RoutedEventArgs e)
         {
-            var result = PasteLink();
+            var result = PasteLinkOrId();
             if (!result) return;
 
             ButtonFind_Click(sender, e);
@@ -431,7 +436,7 @@ namespace JoyLive
             {
                 if (isRecording) return;
 
-                PasteLink();
+                PasteLinkOrId();
 
                 var isCollapsed = (cardFind.Visibility == Visibility.Collapsed);
                 cardFind.Visibility = isCollapsed ? Visibility.Visible : Visibility.Collapsed;
