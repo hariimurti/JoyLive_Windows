@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using RestSharp;
 using System;
 using System.Collections.Generic;
@@ -70,7 +70,7 @@ namespace JoyLive
 
                 var json = JsonConvert.DeserializeObject<JoyLiveUserInfo>(content);
 
-                return (json.errno != -100);
+                return (json.errno == 0);
             }
             catch (Exception ex)
             {
@@ -187,6 +187,8 @@ namespace JoyLive
                     }
                 }
 
+                if (json.errno != 0) throw new Exception(json.msg);
+
                 return json.data;
             }
             catch (Exception ex)
@@ -238,6 +240,8 @@ namespace JoyLive
 
                 var json = JsonConvert.DeserializeObject<JoyLiveUserInfo>(content);
 
+                if (json.errno != 0) throw new Exception(json.msg);
+
                 return json.data;
             }
             catch (Exception ex)
@@ -281,6 +285,8 @@ namespace JoyLive
                 catch (Exception ex) { Console.WriteLine(ex.Message); }
 
                 var json = JsonConvert.DeserializeObject<JoyLiveRooms>(content);
+
+                if (json.errno != 0) throw new Exception(json.msg);
 
                 nextPage++;
 
