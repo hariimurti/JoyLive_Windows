@@ -234,7 +234,7 @@ namespace MangoLive
                 var dump = false;
                 var isPlaying = false;
 
-                if (!firsttime)
+                if (!firsttime && App.CheckBeforeRecording)
                 {
                     SetStatus("Checking room...");
                     var room = await MangoApi.GetRoomInfo(user.rid);

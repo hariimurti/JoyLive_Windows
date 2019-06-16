@@ -50,6 +50,10 @@ namespace MangoLive
         {
             int.TryParse(ConfigurationManager.AppSettings["TimeoutInMinute"], out App.RetryTimeout);
         }
+        public static bool CheckBeforeRecording()
+        {
+            return (ConfigurationManager.AppSettings["CheckBeforeRecording"].ToLower() == "true");
+        }
 
         public static string GetAppHost()
         {

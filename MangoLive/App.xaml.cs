@@ -16,6 +16,7 @@ namespace MangoLive
         public static readonly string WorkingDir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
         public static readonly string OutputDir = GetOutputDir();
         public static int RetryTimeout = 15;
+        public static bool CheckBeforeRecording = Configs.CheckBeforeRecording();
 
         private static string GetOutputDir()
         {
