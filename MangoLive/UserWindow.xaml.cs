@@ -266,11 +266,18 @@ namespace MangoLive
                 }
                 if (radioManual.IsChecked == false)
                 {
-                    if (radioImmediately.IsChecked == true) break;
+                    if (radioImmediately.IsChecked == true)
+                    {
+                        SetStatus("Timeout...");
+                        break;
+                    }
                     if (radioCustomTimeout.IsChecked == true)
                     {
                         if (IsTimeout(timestart))
+                        {
+                            SetStatus("Timeout...");
                             break;
+                        }
 
                         var to = Timeout(timestart);
                         SetStatus($"Timeout in {to.Minutes.ToString("00")}:{to.Seconds.ToString("00")}");
