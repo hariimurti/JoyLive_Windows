@@ -1,10 +1,11 @@
-﻿using System;
+﻿using MangoLive.Json;
+using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace JoyLive
+namespace MangoLive
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -40,22 +41,37 @@ namespace JoyLive
             AddStatus("Starting...");
             AddStatus("Find Me at https://t.me/paijemdev");
 
-            if (App.UseAccount)
+            AddStatus("Reading configs...");
+            Configs.SetRetryTimeoutValue();
+
+            AddStatus("Get my Account...");
+            var myinfo = await MangoApi.GetMyInfo();
+            if (myinfo.errno != 0)
             {
-                AddStatus("Checking status...");
-                var api = new JoyLiveApi();
-                var status = await api.isLoggedIn();
-                App.UseAccount = status;
-                AddStatus("Status : " + (status ? "Logged In" : "Logged Out"));
-                if (!status)
+                while (true)
                 {
-                    var login = await api.Login();
-                    AddStatus("Login : " + (login ? "Success" : "Failed"));
-                    App.UseAccount = login;
+                    AddStatus("Login with account...");
+                    var login = await MangoApi.Login();
+                    if (login.errno != 0)
+                    {
+                        AddStatus("Status : Login Failed!");
+                        var dialog = MessageBox.Show($"{login.msg}\n\n-- -- --\n[YES] Try again? [NO] To close.", this.Title, MessageBoxButton.YesNo, MessageBoxImage.Question);
+                        if (dialog == MessageBoxResult.No)
+                        {
+                            Environment.Exit(1);
+                        }
+                    }
+                    else
+                    {
+                        AddStatus("Status : Login Success");
+                        break;
+                    }
                 }
             }
-
-            Configs.SetRetryTimeoutValue();
+            else
+            {
+                AddStatus("Status : Logged In");
+            }
 
             await GetNextPage();
             buttonMore.IsEnabled = true;
@@ -66,7 +82,7 @@ namespace JoyLive
             {
                 var auth = new AuthWindow();
                 if (auth.ShowDialog() == false)
-                    this.Close();
+                    Environment.Exit(1);
             }
         }
 
@@ -112,7 +128,7 @@ namespace JoyLive
 
         private async void ButtonReset_Click(object sender, RoutedEventArgs e)
         {
-            await ResetListWithPageOne();
+            await ResetListWithPageZero();
         }
 
         private async void ButtonMore_Click(object sender, RoutedEventArgs e)
@@ -120,30 +136,10 @@ namespace JoyLive
             await GetNextPage();
         }
 
-        private async Task ResetListWithPageOne()
+        private int nextPage = 0;
+        private async Task ResetListWithPageZero()
         {
-            buttonReset.IsEnabled = false;
-            buttonMore.IsEnabled = false;
-
-            var api = new JoyLiveApi();
-
-            AddStatus("Reset: Loading page 1");
-
-            var users = await api.Reset();
-            if (!api.isError)
-            {
-                await Task.Run(() =>
-                {
-                    InsertUsers(users, true);
-                });
-            }
-            else
-            {
-                AddStatus(api.errorMessage);
-            }
-
-            buttonReset.IsEnabled = true;
-            buttonMore.IsEnabled = true;
+            await GetNextPage(true);
 
             if (listBox.Items.Count > 0)
             {
@@ -151,30 +147,41 @@ namespace JoyLive
             }
         }
 
-        private async Task GetNextPage()
+        private async Task GetNextPage(bool reset = false)
         {
             buttonReset.IsEnabled = false;
             buttonMore.IsEnabled = false;
 
-            var api = new JoyLiveApi();
+            if (reset)
+                nextPage = 0;
 
-            AddStatus($"Loading page {api.GetNextPage()}");
+            bool noMore = false;
+            AddStatus($"Loading page {nextPage}");
 
-            var users = await api.GetRoomInfo();
-            if (!api.isError)
+            var rooms = await MangoApi.GetRooms(nextPage);
+            if (rooms.errno == 0)
             {
-                await Task.Run(() =>
+                if (rooms.data.Length > 0)
                 {
-                    InsertUsers(users);
-                });
+                    nextPage++;
+                    await Task.Run(() =>
+                    {
+                        InsertUsers(rooms.data, reset);
+                    });
+                }
+                else
+                {
+                    AddStatus("No more users");
+                    noMore = true;
+                }
             }
             else
             {
-                AddStatus(api.errorMessage);
+                AddStatus(rooms.msg);
             }
 
             buttonReset.IsEnabled = true;
-            buttonMore.IsEnabled = true;
+            buttonMore.IsEnabled = !noMore;
         }
 
         private void InsertUsers(User[] users, bool reset = false)
@@ -188,10 +195,7 @@ namespace JoyLive
                 {
                     //only female & unknown
                     if (user.sex == "1") continue;
-
-                    //check blacklist
-                    if (user.blacklist.Contains(user.mid)) continue;
-
+                    
                     var context = new ListBoxContext(user);
 
                     var found = false;

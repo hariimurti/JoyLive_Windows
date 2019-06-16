@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{28020F32-5E89-4001-BA38-2B9B7C5BA7C8}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>JoyLive</RootNamespace>
-    <AssemblyName>JoyLive</AssemblyName>
+    <RootNamespace>MangoLive</RootNamespace>
+    <AssemblyName>MangoLive</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -47,7 +47,7 @@
     <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>JoyLiveTv.App</StartupObject>
+    <StartupObject>MangoLive.App</StartupObject>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>Resources\icon.ico</ApplicationIcon>
@@ -92,6 +92,11 @@
       <DependentUpon>AuthWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Configs.cs" />
+    <Compile Include="DumpFile.cs" />
+    <Compile Include="Json\GetInfo.cs" />
+    <Compile Include="Json\GetMyInfo.cs" />
+    <Compile Include="Json\GetRooms.cs" />
+    <Compile Include="Json\GetUserInfo.cs" />
     <Compile Include="UserWindow.xaml.cs">
       <DependentUpon>UserWindow.xaml</DependentUpon>
     </Compile>
@@ -112,8 +117,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ExtendedString.cs" />
-    <Compile Include="JoyLiveApi.cs" />
-    <Compile Include="JoyLiveData.cs" />
+    <Compile Include="MangoApi.cs" />
+    <Compile Include="UserAction.cs" />
     <Compile Include="ListBoxContext.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -159,12 +164,10 @@
     <Resource Include="Resources\play.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\icon.ico" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\no-image.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\icon.ico" />
     <Content Include="rtmpdump.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

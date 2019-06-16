@@ -1,7 +1,8 @@
-﻿using System;
+﻿using MangoLive.Json;
+using System;
 using System.Windows.Media.Imaging;
 
-namespace JoyLive
+namespace MangoLive
 {
     internal class ListBoxContext
     {

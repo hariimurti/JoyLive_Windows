@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.271
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29009.5
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JoyLive", "JoyLive\JoyLive.csproj", "{28020F32-5E89-4001-BA38-2B9B7C5BA7C8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MangoLive", "MangoLive\MangoLive.csproj", "{28020F32-5E89-4001-BA38-2B9B7C5BA7C8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

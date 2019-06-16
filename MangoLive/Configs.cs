@@ -2,12 +2,17 @@
 using System.Configuration;
 using System.IO;
 
-namespace JoyLive
+namespace MangoLive
 {
     internal class Configs
     {
         private static Configuration cfg = ConfigurationManager
             .OpenExeConfiguration(ConfigurationUserLevel.None);
+
+        public static bool GetDumpFile()
+        {
+            return (ConfigurationManager.AppSettings["DumpFile"].ToLower() == "true");
+        }
 
         public static double GetHeight()
         {
@@ -46,9 +51,14 @@ namespace JoyLive
             int.TryParse(ConfigurationManager.AppSettings["TimeoutInMinute"], out App.RetryTimeout);
         }
 
-        public static bool UseLogin()
+        public static string GetAppHost()
         {
-            return ConfigurationManager.AppSettings["Login"].ToLower() == "true";
+            return ConfigurationManager.AppSettings["AppHost"];
+        }
+
+        public static string GetMobileHost()
+        {
+            return ConfigurationManager.AppSettings["AppHost"];
         }
 
         public static string GetUsername()
@@ -75,22 +85,21 @@ namespace JoyLive
         public static bool IsKeyValid(string serial)
         {
             var key = GetKey();
-            if (!string.IsNullOrWhiteSpace(key))
+            if (string.IsNullOrWhiteSpace(key))
+                return false;
+
+            var master = Path.Combine(App.WorkingDir, "master.key");
+            if (File.Exists(master))
             {
-                var master = Path.Combine(App.WorkingDir, "master.key");
-                if (File.Exists(master))
+                try
                 {
-                    try
-                    {
-                        if (File.ReadAllText(master) == "4iCe2pTU0L0yux4fc2QVMg==".ToDecrypt())
-                            return true;
-                    }
-                    catch (Exception)
-                    { }
+                    if (File.ReadAllText(master) == "4iCe2pTU0L0yux4fc2QVMg==".ToDecrypt())
+                        return true;
                 }
-                return (key.ToDecrypt() == serial);
+                catch (Exception)
+                { }
             }
-            return false;
+            return (key.ToDecrypt() == serial);
         }
 
         public static bool SaveKeyIfValid(string serial, string key)

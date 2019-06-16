@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace JoyLive
+namespace MangoLive
 {
     /// <summary>
     /// Interaction logic for AuthWindow.xaml

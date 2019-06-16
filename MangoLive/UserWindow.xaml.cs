@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MangoLive.Json;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -7,7 +8,7 @@ using System.Windows;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 
-namespace JoyLive
+namespace MangoLive
 {
     /// <summary>
     /// Interaction logic for UserWindow.xaml
@@ -175,14 +176,14 @@ namespace JoyLive
 
             SetStatus($"Get userid: {id}");
 
-            var api = new JoyLiveApi();
-            var userInfo = await api.GetUser(id);
+            var getUser = await MangoApi.GetUser(id);
 
-            if (api.isError)
+            if (getUser.errno != 0)
             {
-                SetStatus(api.errorMessage);
+                SetStatus(getUser.msg);
                 return;
             }
+            var userInfo = getUser.data;
 
             // parse userInfo to user
             user = new User
@@ -196,14 +197,12 @@ namespace JoyLive
 
             LoadUserInfo(userInfo);
 
-            if (App.UseAccount)
+            var room = await MangoApi.GetRoomInfo(user.rid);
+            if (room.errno == 0)
             {
-                var room = await api.GetRoomInfo(user.rid);
-                if (!api.isError)
-                {
-                    textViewer.Text = room.isPlaying ? "Online" : "Offline";
-                    if (room.isPlaying) cardFind.Visibility = Visibility.Collapsed;
-                }
+                textViewer.Text = room.data.isPlaying ? "Online" : "Offline";
+                if (room.data.isPlaying)
+                    cardFind.Visibility = Visibility.Collapsed;
             }
 
             LockInput(false);
@@ -227,49 +226,44 @@ namespace JoyLive
             buttonDump.Visibility = Visibility.Collapsed;
             buttonStop.Visibility = Visibility.Visible;
 
-            var api = new JoyLiveApi();
-
             isRecording = true;
             var firsttime = true;
             var timestart = DateTime.Now;
             while (isRecording)
             {
                 var dump = false;
-                if (App.UseAccount)
-                {
-                    var isPlaying = false;
+                var isPlaying = false;
 
-                    if (!firsttime)
+                if (!firsttime)
+                {
+                    SetStatus("Checking room...");
+                    var room = await MangoApi.GetRoomInfo(user.rid);
+                    if (room.errno == 0)
                     {
-                        SetStatus("Checking room...");
-                        var room = await api.GetRoomInfo(user.rid);
-                        if (!api.isError)
-                        {
-                            isPlaying = room.isPlaying;
-                            textViewer.Text = room.isPlaying ? "Online" : "Offline";
-                            SetStatus(room.isPlaying ? "User Online" : "User Offline");
-                        }
-                        else
-                        {
-                            textViewer.Text = "Unknown";
-                            SetStatus(api.errorMessage);
-                        }
-                        labelViewer.Text = "LiveShow :";
+                        isPlaying = room.data.isPlaying;
+                        textViewer.Text = room.data.isPlaying ? "Online" : "Offline";
+                        SetStatus(room.data.isPlaying ? "User Online" : "User Offline");
                     }
-
-                    if (isPlaying || firsttime)
-                        dump = await DumpStream();
-
-                    firsttime = false;
+                    else
+                    {
+                        textViewer.Text = "Unknown";
+                        SetStatus(room.msg);
+                    }
+                    labelViewer.Text = "LiveShow :";
                 }
-                else
-                {
+
+                if (isPlaying || firsttime)
                     dump = await DumpStream();
-                }
+
+                firsttime = false;
 
                 if (dump) timestart = DateTime.Now;
 
-                if (!isRecording) break;
+                if (!isRecording)
+                {
+                    SetStatus("Stopped by user");
+                    break;
+                }
                 if (radioManual.IsChecked == false)
                 {
                     if (radioImmediately.IsChecked == true) break;

@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Windows;
 
-namespace JoyLive
+namespace MangoLive
 {
     /// <summary>
     /// Interaction logic for App.xaml
@@ -15,9 +15,7 @@ namespace JoyLive
     {
         public static readonly string WorkingDir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
         public static readonly string OutputDir = GetOutputDir();
-        public static readonly string CookiesFile = Path.Combine(WorkingDir, "JoyLive.dat");
         public static int RetryTimeout = 15;
-        public static bool UseAccount = Configs.UseLogin();
 
         private static string GetOutputDir()
         {

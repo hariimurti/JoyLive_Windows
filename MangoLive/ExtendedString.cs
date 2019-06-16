@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace JoyLive
+namespace MangoLive
 {
     public static class ExtendedString
     {
@@ -15,7 +15,7 @@ namespace JoyLive
             return value.Replace("rtmp://", "http://") + "/playlist.m3u8";
         }
 
-        public static string ToHumanReadableFormat(this long value)
+        public static string ToHumanReadableFormat(this int value)
         {
             return new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)
                 .AddSeconds(value)
