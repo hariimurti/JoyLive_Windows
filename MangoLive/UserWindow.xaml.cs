@@ -246,6 +246,7 @@ namespace MangoLive
                     }
                     else
                     {
+                        isPlaying = true;
                         textViewer.Text = "Unknown";
                         SetStatus(room.msg);
                     }
