@@ -232,7 +232,7 @@ namespace MangoLive
             while (isRecording)
             {
                 var dump = false;
-                var isPlaying = false;
+                var isPlaying = !App.CheckBeforeRecording;
 
                 if (!firsttime && App.CheckBeforeRecording)
                 {
@@ -252,7 +252,7 @@ namespace MangoLive
                     labelViewer.Text = "LiveShow :";
                 }
 
-                if (isPlaying || firsttime)
+                if (isPlaying)
                     dump = await DumpStream();
 
                 firsttime = false;
@@ -268,14 +268,14 @@ namespace MangoLive
                 {
                     if (radioImmediately.IsChecked == true)
                     {
-                        SetStatus("Timeout...");
+                        SetStatus("Timeout!");
                         break;
                     }
                     if (radioCustomTimeout.IsChecked == true)
                     {
                         if (IsTimeout(timestart))
                         {
-                            SetStatus("Timeout...");
+                            SetStatus("Timeout!");
                             break;
                         }
 
